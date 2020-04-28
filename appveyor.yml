@@ -1,12 +1,29 @@
+
+# # collect IP and username for rdp
+# init:
+#  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
+version: 0.1.0-{build}-{branch}
+
+# Do not build on tags (GitHub and BitBucket)
+skip_tags: true
+
+# Start builds on tags only (GitHub and BitBucket)
+# skip_non_tags: true
+
+branches:
+  only:
+    - master
+
 environment:
   RTOOLS_ARCH: x86_64
-  PfxUri:
-    secure: z+vP1iY4odY07BV7v+yfuA2MBKQFFLGokZoefPhz22ewYZAm6XZ8jsdphTFYkn7L
-  CertPassword:
-    secure: nwSwtaLCl6Xo5sfqKLvO30aFFGCgjGJ2GKTqS33zkJg=
-  SignTool: C:\Program Files (x86)\Windows Kits\8.1\bin\x64\signtool.exe
-  CertKit: C:\Program Files (x86)\Windows Kits\10\App Certification Kit\appcert.exe
-  KeyFile: C:\jeroen.pfx
+# PfxUri:
+#   secure: z+vP1iY4odY07BV7v+yfuA2MBKQFFLGokZoefPhz22ewYZAm6XZ8jsdphTFYkn7L
+# CertPassword:
+#   secure: nwSwtaLCl6Xo5sfqKLvO30aFFGCgjGJ2GKTqS33zkJg=
+# SignTool: C:\Program Files (x86)\Windows Kits\8.1\bin\x64\signtool.exe
+# CertKit: C:\Program Files (x86)\Windows Kits\10\App Certification Kit\appcert.exe
+# KeyFile: C:\jeroen.pfx
   matrix:
     - rsource_url: https://cran.r-project.org/src/base-prerelease/R-latest.tar.gz
       rversion: r-patched
@@ -29,56 +46,39 @@ after_build:
   - cd pkg\r-installer
   - call target.cmd
   - move ..\..\src\R-source\src\gnuwin32\installer\%target%-win.exe .
-  - ps: Start-FileDownload $env:PfxUri -FileName $env:KeyFile
-  - ps: SignFiles "${env:target}-win.exe"
-  - ps: Remove-Item –path $env:KeyFile
+# - ps: Start-FileDownload $env:PfxUri -FileName $env:KeyFile
+# - ps: SignFiles "${env:target}-win.exe"
+# - ps: Remove-Item –path $env:KeyFile
   - md5sum %target%-win.exe > md5sum.txt.%target%
-  - 7z a ..\..\%target%-win.zip %target%-win.exe md5sum.txt.%target% *.log *.html SVN-REVISION.* README.*
-  - move %target%-win.exe ..\..\
+# - 7z a ..\..\%target%-win.zip %target%-win.exe md5sum.txt.%target% *.log *.html SVN-REVISION.* README.*
+  - 7z a ..\..\%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%.zip %target%-win.exe md5sum.txt.%target% *.log *.html SVN-REVISION.* README.*
+# - move %target%-win.exe ..\..\
   - cd ..\..
 
 artifacts:
-  - path: "%target%-win.exe"
-    name: installer
-  - path: "%target%-win.zip"
-    name: CRAN Bundle
-  - path: r-devel.log
-    name: buildlog
+  - path: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%.zip"
+    name: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%.zip"
 
-on_finish:
-  - 7z a tests.zip src\R-source\tests\*.Rout* src\build32\tests\*.Rout*
-  - appveyor PushArtifact tests.zip
+on_failure:
+  - echo Total build time (with tests) takes OVER one hour
+  - echo so build+tests is not done (only "build" is done.)
+  - echo Test result are obtained from . . .
+  - echo
+  - echo https://ftp.opencpu.org/current/check.log
+  - echo https://ftp.opencpu.org/archive/r-patched/svn_number/check.log
+  - echo https://ftp.opencpu.org/archive/r-release/R-x.y.z/check.log
 
 deploy:
-  - provider: BinTray
-    username: jeroen
-    subject: rtools
-    repo: installer
-    package: testing
-    version: latest
-    publish: true
-    override: true
-    artifact: "%target%-win.exe"
-    api_key:
-      secure: rKoNWcAgUrOM7QLX4cEvA1iKoY2DR4ps/1PRveq7rJknjQjcpKx8xGs42CJPhDwJ
-    on:
-      branch: master
-      rversion: r-devel
+  release: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%.zip"
+  provider: GitHub
+  auth_token:
+    secure: KzS1DumC2yBg2LGN9x3AemHFOjAdp+rD58rW5aGGpwW4Pfdwdm7AmRpYKprPY8Gs
+  artifact: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%.zip"
+  draft: false
+  prerelease: false
+  on:
+    branch: master
 
-  - provider: Environment
-    name: ftp_archive
-    target: "%target%"
-    archive: "%rversion%"
-    revision: "%revision%"
-    on:
-      branch: master
-      cran: true
-    artifact: "%target%-win.zip"
-
-  - provider: Environment
-    name: ftp_current
-    target: "%target%"
-    on:
-      branch: master
-      cran: true
-    artifact: "%target%-win.zip"
+# on_finish:
+#   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+# # remove locking file from the desktop
