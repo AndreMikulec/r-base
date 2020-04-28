@@ -1,4 +1,4 @@
-# Base R Installer [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/r-windows/r-base?branch=master)](https://ci.appveyor.com/project/jeroen/r-base)
+# Base R Installer [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/AndreMikulec/r-base?branch=master)](https://ci.appveyor.com/project/AndreMikulec/r-base)
 
 > Building base R using rtools40
 
