@@ -36,14 +36,14 @@ TEXI2DVI = TEXINDEX=@texindex@ texify
 
 # ANDRE ADDED
 ifdef DEBUG
-  DEBUGFLAG = -ggdb
+  DEBUGFLAG = -ggdb -Og
 else
   DEBUGFLAG =
 endif
 
 # ANDRE ADDED
 ifdef DEBUG
-  G_FLAG = -ggdb
+  G_FLAG = -ggdb -Og
 else
   G_FLAG =
 endif
