@@ -81,19 +81,36 @@ build() {
   rm -Rf ${srcdir}/build32
   MSYS="winsymlinks:lnk" cp -Rf "${srcdir}/R-source" ${srcdir}/build32
 
+  # ANDRE ADDED
+  if ! test "0" = "`grep -c -e "^\s*EOPTS\s*=\s*" ${srcdir}/MkRules.local.in`"
+  then
+    if ! test "-$MARCHMTUNE-" = "--"
+    then
+      sed -i -e 's/^\s*EOPTS\s*=s*/EOPTS += $MARCHMTUNE/' ${srcdir}/MkRules.local.in
+    fi
+  else
+    if ! test "-$MARCHMTUNE-" = "--"
+    then
+      echo "EOPTS += $MARCHMTUNE" >> ${srcdir}/MkRules.local.in
+    fi
+  fi
+
+  # ANDRE ADDED
+  sed -i "s/\(.*\)/\1 $MARCHMTUNENAME $DIST_BUILD/" ${srcdir}/../../VERSION-NICK
+
   # Build 32 bit version
   msg2 "Building 32-bit version of base R..."
   cd "${srcdir}/build32/src/gnuwin32"
   sed -e "s|@win@|32|" -e "s|@texindex@||" -e "s|@home32@||" "${srcdir}/MkRules.local.in" > MkRules.local
   #make 32-bit SHELL='sh -x'
-  make 32-bit
+  make %MAKE_32BIT%
   
   # Build 64 bit + docs and installers
   msg2 "Building 64-bit distribution"
   cd "${srcdir}/R-source/src/gnuwin32"
   TEXINDEX=$(cygpath -m $(which texindex))  
   sed -e "s|@win@|64|" -e "s|@texindex@|${TEXINDEX}|" -e "s|@home32@|${srcdir}/build32|" "${srcdir}/MkRules.local.in" > MkRules.local
-  make distribution
+  make %MAKE_DISTRIBUTION%
 }
 
 check(){

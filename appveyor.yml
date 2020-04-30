@@ -28,9 +28,39 @@ environment:
     - rsource_url: https://cran.r-project.org/src/base-prerelease/R-latest.tar.gz
       rversion: r-patched
       cran: true
+      MAKE_32BIT: 32-bit DEBUG=T
+      MAKE_DISTRIBUTION: distribution DEBUG=T
+      MARCHMTUNE:
+      MARCHMTUNENAME: CPU Build Generic
+      DIST_BUILD: with Debugging Symbols
+      DEPLOYNAME: Generic_Debug
+    - rsource_url: https://cran.r-project.org/src/base-prerelease/R-latest.tar.gz
+      rversion: r-patched
+      cran: true
+      MAKE_32BIT: 32-bit
+      MAKE_DISTRIBUTION: distribution
+      MARCHMTUNE: -march=corei7 -mavx -mavx2 -O3 -funroll-loops -ffast-math
+      MARCHMTUNENAME: CPU Build CoreI7 with AVX2
+      DIST_BUILD: without Debugging Symbols
+      DEPLOYNAME: CoreI7_mAVX2_NoDebug
     - rsource_url: https://cran.r-project.org/src/base-prerelease/R-devel.tar.gz
       rversion: r-devel
       cran: true
+      MAKE_32BIT: 32-bit DEBUG=T
+      MAKE_DISTRIBUTION: distribution DEBUG=T
+      MARCHMTUNE:
+      MARCHMTUNENAME: CPU Build Generic
+      DIST_BUILD: with Debugging Symbols
+      DEPLOYNAME: Generic_Debug
+    - rsource_url: https://cran.r-project.org/src/base-prerelease/R-devel.tar.gz
+      rversion: r-devel
+      cran: true
+      MAKE_32BIT: 32-bit
+      MAKE_DISTRIBUTION: distribution
+      MARCHMTUNE: -march=corei7 -mavx -mavx2 -O3 -funroll-loops -ffast-math
+      MARCHMTUNENAME: CPU Build CoreI7 with AVX2
+      DIST_BUILD: without Debugging Symbols
+      DEPLOYNAME: CoreI7_mAVX2_NoDebug
 
 install:
     - ps: Import-Module .\scripts.ps1
@@ -51,13 +81,13 @@ after_build:
 # - ps: Remove-Item –path $env:KeyFile
   - md5sum %target%-win.exe > md5sum.txt.%target%
 # - 7z a ..\..\%target%-win.zip %target%-win.exe md5sum.txt.%target% *.log *.html SVN-REVISION.* README.*
-  - 7z a ..\..\%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%.zip %target%-win.exe md5sum.txt.%target% *.log *.html SVN-REVISION.* README.*
+  - 7z a ..\..\%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%_%DEPLOYNAME%.zip %target%-win.exe md5sum.txt.%target% *.log *.html SVN-REVISION.* README.*
 # - move %target%-win.exe ..\..\
   - cd ..\..
 
 artifacts:
-  - path: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%.zip"
-    name: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%.zip"
+  - path: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%_%DEPLOYNAME%.zip"
+    name: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%_%DEPLOYNAME%.zip"
 
 on_failure:
   - echo Total build time (with tests) takes OVER one hour
@@ -69,11 +99,11 @@ on_failure:
   - echo https://ftp.opencpu.org/archive/r-release/R-x.y.z/check.log
 
 deploy:
-  release: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%.zip"
+  release: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%_%DEPLOYNAME%.zip"
   provider: GitHub
   auth_token:
     secure: KzS1DumC2yBg2LGN9x3AemHFOjAdp+rD58rW5aGGpwW4Pfdwdm7AmRpYKprPY8Gs
-  artifact: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%.zip"
+  artifact: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%_%DEPLOYNAME%.zip"
   draft: false
   prerelease: false
   on:
