@@ -96,7 +96,7 @@ build() {
   fi
 
   # ANDRE ADDED
-  sed -i "s/\(.*\)/\1 $MARCHMTUNENAME $DIST_BUILD/" ${srcdir}/../../VERSION-NICK
+  sed -i "s/\(.*\)/\1 $MARCHMTUNENAME $DIST_BUILD/" ${srcdir}/build32/VERSION-NICK
 
   # Build 32 bit version
   msg2 "Building 32-bit version of base R..."
