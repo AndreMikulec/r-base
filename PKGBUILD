@@ -98,9 +98,9 @@ build() {
   # If the G_FLAG is found
   if ! test "0" = "`grep -c -e "^\s*G_FLAG\s*=\s*" ${srcdir}/MkRules.local.in`"
   then
-    sed -i -e 's/^\s*G_FLAG\s*=s*/G_FLAG = ggdb -Og/' ${srcdir}/MkRules.local.in
+    sed -i -e 's/^\s*G_FLAG\s*=s*/G_FLAG = -ggdb -Og/' ${srcdir}/MkRules.local.in
   else
-    echo "G_FLAG = ggdb -Og" >> ${srcdir}/MkRules.local.in
+    echo "G_FLAG = -ggdb -Og" >> ${srcdir}/MkRules.local.in
   fi
 
   # ANDRE
