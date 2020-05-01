@@ -1,0 +1,152 @@
+
+# https://cran.r-project.org/doc/manuals/r-release/R-admin.html
+#
+# Appending More Text to Variables
+# https://www.gnu.org/software/make/manual/make.html#Appending
+# https://www.gnu.org/software/make/manual/make.html#Conditionals
+#
+#
+# MkRules.local (MkRules.dist is a sample) has its variables read-in. (mostly = user preferences - define explicitly)
+# MkRules.rules has its variables read in. (mostly ?= defaults - if not defined then define here)
+# Makeconf has its variables read in.
+
+
+\src\gnuwin32\MkRules.dist (MkRules.local)
+
+  # additional optimization flags (e.g. -mtune=native for a private build)
+  # EOPTS =
+
+
+\src\gnuwin32\MkRules.rules
+
+  EOPTS ?= -mfpmath=sse -msse2 -mstackrealign
+
+ 
+\src\gnuwin32\Makefile
+
+  R_HOME = ../..
+
+  ## first time through MkRules will not exist.
+
+  ifeq ($(wildcard MkRules?local),MkRules.local)
+  include MkRules.local
+  endif
+
+  include MkRules.rules
+  include ../../share/make/vars.mk
+
+  MK = $(MAKE) --no-print-directory
+
+  all:
+    @$(MK) MkRules
+    @if test -f  ../../SVN-REVISION ; then \
+      cp ../../SVN-REVISION ../../SVN-REVISION.bak ; \
+    fi
+    @$(MK) rbuild
+    @$(MK) -C ../library -f Makefile.win all WIN=$(WIN)
+    @$(MK) -C ../library -f Makefile.win docs
+    @$(MK) NEWSdocs htmldocs docfiles
+    @$(MK)  -C ../../po -f Makefile.win
+
+    LATER
+
+    ifeq ($(wildcard MkRules?local),MkRules.local)
+    MkRules: MkRules.local MkRules.rules
+      @cat MkRules.local MkRules.rules > MkRules
+    else
+    MkRules: MkRules.rules
+      @cat MkRules.rules > MkRules
+    endif
+  
+\src\gnuwin32\fixed\Makefile
+
+  include ../MkRules 
+
+  fixetc: $(ETC) ../MkRules Makefile
+    $(CP) -p $(ETC) $(R_HOME)/etc
+    $(RM) $(R_HOME)/etc/Makeconf
+    $(MKDIR) -p $(R_HOME)/etc/$(R_ARCH)
+  ifeq "$(WIN)" "64"
+    $(SED) -e 's/WIN = 32/WIN = 64/' \
+      -e "s/-O3/-O2/" \
+      -e "s/@EOPTS@/$(EOPTS)/" \
+      -e "s|BINPREF =|BINPREF ?= $(BINPREF)|" \
+      -e "s|COMPILED_BY =|COMPILED_BY = $(COMPILED_BY)|" \
+      -e "s|IMPDIR = bin|IMPDIR = $(IMPDIR)|" \
+      -e "s|LOCAL_SOFT ?=|LOCAL_SOFT ?= $(LOCAL_SOFT)|" \
+      -e "s|R_ARCH =|R_ARCH = $(R_ARCH)|" \
+      -e "s|DT_ARCH =|DT_ARCH = $(DT_ARCH)|" \
+      -e "s|RC_ARCH =|RC_ARCH = $(RC_ARCH)|" \
+      -e "s|M_ARCH =|M_ARCH = $(M_ARCH)|" \
+      -e "s|@SYMPAT@|$(SYMPAT)|" \
+      -e "s|(TCL_HOME)/bin|(TCL_HOME)/bin64|" \
+      -e "s|@OPENMP@|$(OPENMP)|" \
+      -e "s|@PTHREAD@|$(PTHREAD)|" \
+      -e "s@NM_FILTER =@NM_FILTER = $(NM_FILTER)@" \
+      -e "s|@GF7OPTS@|$(GF7OPTS)|" \
+      etc/Makeconf > $(R_HOME)/etc$(R_ARCH)/Makeconf
+  else
+    $(SED) -e "s|IMPDIR = bin|IMPDIR = $(IMPDIR)|" \
+      -e "s/-O3/-O2/" \
+      -e "s/@EOPTS@/$(EOPTS)/" \
+      -e "s|BINPREF =|BINPREF ?= $(BINPREF)|" \
+      -e "s|COMPILED_BY =|COMPILED_BY = $(COMPILED_BY)|" \
+      -e "s|LOCAL_SOFT ?=|LOCAL_SOFT ?= $(LOCAL_SOFT)|" \
+      -e "s|R_ARCH =|R_ARCH = $(R_ARCH)|" \
+      -e "s|DT_ARCH =|DT_ARCH = $(DT_ARCH)|" \
+      -e "s|RC_ARCH =|RC_ARCH = $(RC_ARCH)|" \
+      -e "s|M_ARCH =|M_ARCH = $(M_ARCH)|" \
+      -e "s|@SYMPAT@|$(SYMPAT)|" \
+      -e "s|@OPENMP@|$(OPENMP)|" \
+      -e "s|@PTHREAD@|$(PTHREAD)|" \
+      -e "s@NM_FILTER =@NM_FILTER = $(NM_FILTER)@" \
+      -e "s|@GF7OPTS@|$(GF7OPTS)|" \
+      etc/Makeconf > $(R_HOME)/etc$(R_ARCH)/Makeconf
+  endif
+    $(SED) -e "s+@BINDIR@+$(BINDIR)+" Makeconf > $(R_HOME)/Makeconf
+
+
+\src\gnuwin32\fixed\etc\Makeconf
+
+  ifdef DEBUG
+    DLLFLAGS=
+    DEBUGFLAG=-gdwarf-2
+  else
+    DLLFLAGS=-s
+    DEBUGFLAG=
+  endif
+
+
+\src\nmath\standalone\Makefile.win
+
+  ifdef DEBUG
+   CFLAGS += $(G_FLAG)
+   DLLFLAGS =
+  else
+   DLLFLAGS = -s
+  endif
+
+
+\src\gnuwin32\Makefile
+
+  ifdef DEBUG
+   CFLAGS += $(G_FLAG)
+   FFLAGS += $(G_FLAG)
+   DLLFLAGS =
+  else
+   DLLFLAGS = -s
+  endif
+
+
+\src\gnuwin32\front-ends\Makefile
+
+  ifdef DEBUG
+   CFLAGS += $(G_FLAG)
+   LINKFLAGS =
+   DLLFLAGS =
+  else
+   LINKFLAGS = -s
+   DLLFLAGS = -s
+  endif
+
+

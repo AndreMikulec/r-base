@@ -93,47 +93,51 @@ environment:
 ```
 
 
-### Debugging Symbols for R (DEBUGFLAG) and R packages (G_FLAG)
+### Debug and Optimization Description in the Version Nickname
 
-Because 64-bit Windows does not support dwarf-*, in the github R mirror
-file https://github.com/wch/r-source/blob/trunk/src/gnuwin32/fixed/etc/Makeconf
-```
-ifdef DEBUG
-  DLLFLAGS=
-  DEBUGFLAG=-gdwarf-2
-else
-  DLLFLAGS=-s
-  DEBUGFLAG=
-endif
-```
-and in the
-file https://github.com/AndreMikulec/r-base/blob/master/MkRules.local.in
-set (overrided), is the variable DEBUGFLAG
-```
-ifdef DEBUG
-  DEBUGFLAG = -ggdb -Og
-else
-  DEBUGFLAG =
-endif
-```
+(CURRENTLY NOT WORKING)
+
+In the OPB version of R, the version nick name is set in the R mirror
+file https://github.com/wch/r-source/blob/trunk/VERSION-NICK
 In the
-file https://github.com/wch/r-source/blob/trunk/src/gnuwin32/MkRules.rules
-set is the default G_FLAG
+file https://github.com/AndreMikulec/r-base/blob/master/PKGBUILD
+added (appended to) the
+file https://github.com/wch/r-source/blob/trunk/VERSION-NICK
+contents, are the messages `$MARCHMTUNENAME` and `$DIST_BUILD`
 ```
-G_FLAG ?= -gdwarf-2
+sed -i "s/\(.*\)/\1 $MARCHMTUNENAME $DIST_BUILD/" ${srcdir}/build32/VERSION-NICK
 ```
-Using
-file file https://github.com/AndreMikulec/r-base/blob/master/PKGBUILD
+
+
+### Debugging Symbols for R (G_FLAG) and R packages (DEBUGFLAG)
+
+Because 64-bit Windows does not support dwarf-*, in the
+file https://github.com/AndreMikulec/r-base/blob/master/PKGBUILD
+using
 ```
-if ! test "0" = "`grep -c -e "^\s*G_FLAG\s*=\s*" ${srcdir}/MkRules.local.in`"
+if ! test "0" = "`grep -c -e "^\s*G_FLAG\s*+\?=\s*" ${srcdir}/MkRules.local.in`"
 then
-  sed -i -e 's/^\s*G_FLAG\s*=s*/G_FLAG = -ggdb -Og/' ${srcdir}/MkRules.local.in
+  sed -i "s/^\s*G_FLAG\s*+\?=.*/G_FLAG = -ggdb -Og/" ${srcdir}/MkRules.local.in
 else
   echo "G_FLAG = -ggdb -Og" >> ${srcdir}/MkRules.local.in
 fi
 ```
 set (overrided) is the variable G_FLAG in the
 file https://github.com/AndreMikulec/r-base/blob/master/MkRules.local.in
+
+Because 64-bit Windows does not support dwarf-*, in the
+file https://github.com/AndreMikulec/r-base/blob/master/PKGBUILD
+using
+```
+if ! test "0" = "`grep -c -e "^\s*DEBUGFLAG\s*+\?=\s*" ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf`"
+then
+  sed -i -e "s/^\s*DEBUGFLAG\s*+\?=.*/DEBUGFLAG = -ggdb -Og/" ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
+else
+  echo "DEBUGFLAG = -ggdb -Og" >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
+fi
+```
+set (overrided) is the variable DEBUGFLAG in the
+file https://github.com/wch/r-source/blob/trunk/src/gnuwin32/fixed/Makeconf
 
 
 ### Optimization Flags for R and R packages
@@ -146,16 +150,24 @@ in the OPB version of R the variable EOPTS
 EOPTS ?= -mfpmath=sse -msse2 -mstackrealign
 ```
 is set (if the value does not already exist in the
-file https://github.com/wch/r-source/blob/trunk/src/gnuwin32/fixed/etc/Makeconf).
+file https://github.com/AndreMikulec/r-base/blob/master/MkRules.local.in).
 However, in the
 file https://github.com/AndreMikulec/r-base/blob/master/PKGBUILD
 to the
-file https://github.com/AndreMikulec/r-base/blob/master/MkRules.local.in
+file https://github.com/wch/r-source/blob/trunk/src/gnuwin32/MkRules.rules
 added (appended to) the previous EOPTS value, if any, is the `$MARCHMTUNE`
 ```
-if ! test "-$MARCHMTUNE-" = "--"
+if ! test "0" = "`grep -c -e "^\s*EOPTS\s*+\?=\s*" ${srcdir}/build32/src/gnuwin32/MkRules.rules`"
 then
-  echo "EOPTS += $MARCHMTUNE" >> ${srcdir}/MkRules.rules
+  if ! test "-$MARCHMTUNE-" = "--"
+  then
+    sed -i "s/\(^\s*EOPTS\s*+\?=.*\)/\1 $MARCHMTUNE/" ${srcdir}/build32/src/gnuwin32/MkRules.rules
+  fi
+else
+  if ! test "-$MARCHMTUNE-" = "--"
+  then
+    echo "EOPTS += $MARCHMTUNE" >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
+  fi
 fi
 ```
 
@@ -189,18 +201,7 @@ meaning
 *make distribution DEBUG=T* or *make distribution *
 
 
-### Debug and Optimization Description in the Version Nickname
 
-In the OPB version of R, the version nick name is set in the R mirror
-file https://github.com/wch/r-source/blob/trunk/VERSION-NICK
-In the
-file https://github.com/AndreMikulec/r-base/blob/master/PKGBUILD
-added (appended to) the
-file https://github.com/wch/r-source/blob/trunk/VERSION-NICK
-contents, are the messages `$MARCHMTUNENAME` and `$DIST_BUILD`
-```
-sed -i "s/\(.*\)/\1 $MARCHMTUNENAME $DIST_BUILD/g" ${srcdir}/build32/VERSION-NICK
-```
 
 
 ### No Code Signing
@@ -253,8 +254,4 @@ r-base_<appveyor build iteration>-<master repository>_<rversion>_<target>_<revis
  - revision is the R SVN revision number
  - DEPLOYNAME describes the build: debug xor optimization
 
-Expand the asset drop down arrow: [v}Asset
-and download the
-file `base_*...*.zip`
-Using an unzip software program, manually extract the R installer: R-x.y.z-win.exe.
-Next, install R.
+Expand the asset drop down arrow: [v}Asset.  Next, download the file `base_*...*.zip`.  Using an unzip software program, manually extract the R installer executable: R-x.y.z-win.exe. Finally, install R.
