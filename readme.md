@@ -109,11 +109,19 @@ sed -i "s/\(.*\)/\1 $MARCHMTUNENAME $DIST_BUILD/" ${srcdir}/build32/VERSION-NICK
 ```
 
 
-### Debugging Symbols for R (G_FLAG) and R packages (DEBUGFLAG)
+### Debugging Symbols for R packages (G_FLAG) and R (DEBUGFLAG)
 
 Because 64-bit Windows does not support dwarf-*, in the
+file https://github.com/AndreMikulec/r-base/blob/master/MkRules.local.in
+adding and using
+```
+ifdef DEBUG
+  G_FLAG =
+endif
+```
+and in the
 file https://github.com/AndreMikulec/r-base/blob/master/PKGBUILD
-using
+adding and using
 ```
 if ! test "0" = "`grep -c -e "^\s*G_FLAG\s*?\?+\?=\s*" ${srcdir}/MkRules.local.in`"
 then
@@ -122,12 +130,12 @@ else
   echo "G_FLAG = -ggdb -Og" >> ${srcdir}/MkRules.local.in
 fi
 ```
-set (overrided) is the variable G_FLAG in the
+sets (overrides) is the (self declared) variable G_FLAG in the
 file https://github.com/AndreMikulec/r-base/blob/master/MkRules.local.in
 
 Because 64-bit Windows does not support dwarf-*, in the
 file https://github.com/AndreMikulec/r-base/blob/master/PKGBUILD
-using
+adding and using
 ```
 if ! test "0" = "`grep -c -e "^\s*DEBUGFLAG\s*?\?+\?=\s*" ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf`"
 then
@@ -136,7 +144,7 @@ else
   echo "DEBUGFLAG = -ggdb -Og" >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
 fi
 ```
-set (overrided) is the variable DEBUGFLAG in the
+sets (overrides) is the variable DEBUGFLAG in the
 file https://github.com/wch/r-source/blob/trunk/src/gnuwin32/fixed/Makeconf
 
 
@@ -155,7 +163,7 @@ However, in the
 file https://github.com/AndreMikulec/r-base/blob/master/PKGBUILD
 to the
 file https://github.com/wch/r-source/blob/trunk/src/gnuwin32/MkRules.rules
-added (appended to) the previous EOPTS value, if any, is the `$MARCHMTUNE`
+adding to (appended to) and using the previous EOPTS value, if any, is the `$MARCHMTUNE` value
 ```
 if ! test "0" = "`grep -c -e "^\s*EOPTS\s*?\?+\?=\s*" ${srcdir}/build32/src/gnuwin32/MkRules.rules`"
 then
