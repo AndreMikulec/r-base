@@ -115,9 +115,9 @@ Because 64-bit Windows does not support dwarf-*, in the
 file https://github.com/AndreMikulec/r-base/blob/master/PKGBUILD
 using
 ```
-if ! test "0" = "`grep -c -e "^\s*G_FLAG\s*+\?=\s*" ${srcdir}/MkRules.local.in`"
+if ! test "0" = "`grep -c -e "^\s*G_FLAG\s*?\?+\?=\s*" ${srcdir}/MkRules.local.in`"
 then
-  sed -i "s/^\s*G_FLAG\s*+\?=.*/G_FLAG = -ggdb -Og/" ${srcdir}/MkRules.local.in
+  sed -i "s/^\s*G_FLAG\s*?\?+\?=.*/G_FLAG = -ggdb -Og/" ${srcdir}/MkRules.local.in
 else
   echo "G_FLAG = -ggdb -Og" >> ${srcdir}/MkRules.local.in
 fi
@@ -129,9 +129,9 @@ Because 64-bit Windows does not support dwarf-*, in the
 file https://github.com/AndreMikulec/r-base/blob/master/PKGBUILD
 using
 ```
-if ! test "0" = "`grep -c -e "^\s*DEBUGFLAG\s*+\?=\s*" ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf`"
+if ! test "0" = "`grep -c -e "^\s*DEBUGFLAG\s*?\?+\?=\s*" ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf`"
 then
-  sed -i -e "s/^\s*DEBUGFLAG\s*+\?=.*/DEBUGFLAG = -ggdb -Og/" ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
+  sed -i -e "s/^\s*DEBUGFLAG\s*?\?+\?=.*/DEBUGFLAG = -ggdb -Og/" ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
 else
   echo "DEBUGFLAG = -ggdb -Og" >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
 fi
@@ -157,11 +157,11 @@ to the
 file https://github.com/wch/r-source/blob/trunk/src/gnuwin32/MkRules.rules
 added (appended to) the previous EOPTS value, if any, is the `$MARCHMTUNE`
 ```
-if ! test "0" = "`grep -c -e "^\s*EOPTS\s*+\?=\s*" ${srcdir}/build32/src/gnuwin32/MkRules.rules`"
+if ! test "0" = "`grep -c -e "^\s*EOPTS\s*?\?+\?=\s*" ${srcdir}/build32/src/gnuwin32/MkRules.rules`"
 then
   if ! test "-$MARCHMTUNE-" = "--"
   then
-    sed -i "s/\(^\s*EOPTS\s*+\?=.*\)/\1 $MARCHMTUNE/" ${srcdir}/build32/src/gnuwin32/MkRules.rules
+    sed -i "s/\(^\s*EOPTS\s*?\?+\?=.*\)/\1 $MARCHMTUNE/" ${srcdir}/build32/src/gnuwin32/MkRules.rules
   fi
 else
   if ! test "-$MARCHMTUNE-" = "--"

@@ -93,9 +93,9 @@ build() {
   # ANDRE
   #
   # If the G_FLAG is found
-  if ! test "0" = "`grep -c -e "^\s*G_FLAG\s*+\?=\s*" ${srcdir}/MkRules.local.in`"
+  if ! test "0" = "`grep -c -e "^\s*G_FLAG\s*?\?+\?=\s*" ${srcdir}/MkRules.local.in`"
   then
-    sed -i "s/^\s*G_FLAG\s*+\?=.*/G_FLAG = -ggdb -Og/" ${srcdir}/MkRules.local.in
+    sed -i "s/^\s*G_FLAG\s*?\?+\?=.*/G_FLAG = -ggdb -Og/" ${srcdir}/MkRules.local.in
   else
     echo "G_FLAG = -ggdb -Og" >> ${srcdir}/MkRules.local.in
   fi
@@ -111,11 +111,11 @@ build() {
   #
   # If the EOPTS is found
   # ANDRE
-  if ! test "0" = "`grep -c -e "^\s*EOPTS\s*+\?=\s*" ${srcdir}/build32/src/gnuwin32/MkRules.rules`"
+  if ! test "0" = "`grep -c -e "^\s*EOPTS\s*?\?+\?=\s*" ${srcdir}/build32/src/gnuwin32/MkRules.rules`"
   then
     if ! test "-$MARCHMTUNE-" = "--"
     then
-      sed -i "s/\(^\s*EOPTS\s*+\?=.*\)/\1 $MARCHMTUNE/" ${srcdir}/build32/src/gnuwin32/MkRules.rules
+      sed -i "s/\(^\s*EOPTS\s*?\?+\?=.*\)/\1 $MARCHMTUNE/" ${srcdir}/build32/src/gnuwin32/MkRules.rules
     fi
   else
     if ! test "-$MARCHMTUNE-" = "--"
@@ -128,26 +128,26 @@ build() {
   echo cat "${srcdir}/build32/src/gnuwin32/MkRules.rules"
   cat       ${srcdir}/build32/src/gnuwin32/MkRules.rules
   #
-  # Sample code (with assigner of "+=" or "=")
+  # Sample code (with assigner of "+=" or "?=" "=")
   # Test for the existence of EOPTS
-  # ! test "0" = "`grep -c -e "^\s*EOPTS\s*+\?=\s*" ${srcdir}/MkRules.rules`"
+  # ! test "0" = "`grep -c -e "^\s*EOPTS\s*?\?+\?=\s*" ${srcdir}/MkRules.rules`"
   # Replace line
-  # sed -i "s/^\s*EOPTS\s*+\?=.*/EOPTS += $MARCHMTUNE/" ${srcdir}/MkRules.rules
+  # sed -i "s/^\s*EOPTS\s*?\?+\?=.*/EOPTS += $MARCHMTUNE/" ${srcdir}/MkRules.rules
   # To the current line, append new data
   #   # https://www.gnu.org/software/sed/manual/html_node/Regular-Expressions.html
   #   One line file
   #     sed -i "s/\(.*\)/\1 $MARCHMTUNE/g" ${srcdir}/MkRules.rules
   #   Multiline file
-  #     sed -e "s/\(^\s*EOPTS\s*+\?=.*\)/\1 $MARCHMTUNE/" MkRules.rules
+  #     sed -e "s/\(^\s*EOPTS\s*?\?+\?=.*\)/\1 $MARCHMTUNE/" MkRules.rules
   # To the file append a new line
   # echo "EOPTS += $MARCHMTUNE" >> ${srcdir}/MkRules.rules
 
   # ANDRE
   #
   # If the DEBUGFLAG is found
-  if ! test "0" = "`grep -c -e "^\s*DEBUGFLAG\s*+\?=\s*" ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf`"
+  if ! test "0" = "`grep -c -e "^\s*DEBUGFLAG\s*?\?+\?=\s*" ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf`"
   then
-    sed -i -e "s/^\s*DEBUGFLAG\s*+\?=.*/DEBUGFLAG = -ggdb -Og/" ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
+    sed -i -e "s/^\s*DEBUGFLAG\s*?\?+\?=.*/DEBUGFLAG = -ggdb -Og/" ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
   else
     echo "DEBUGFLAG = -ggdb -Og" >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
   fi
