@@ -28,24 +28,15 @@ environment:
     - rsource_url: https://cran.r-project.org/src/base-prerelease/R-latest.tar.gz
       rversion: r-patched
       cran: true
-      MAKE_32BIT: 32-bit DEBUG=T
-      MAKE_DISTRIBUTION: distribution DEBUG=T
-      MARCHMTUNE:
-      MARCHMTUNENAME: CPU Build Generic
-      DIST_BUILD: with Debugging Symbols
-      DEPLOYNAME: Generic_Debug
+      MAKE_32BIT: 32-bit
+      MAKE_DISTRIBUTION: distribution
+      MARCHMTUNE: -march=corei7 -mavx -mavx2 -O3 -funroll-loops -ffast-math
+      MARCHMTUNENAME: CPU Build CoreI7 with AVX2
+      DIST_BUILD: without Debugging Symbols
+      DEPLOYNAME: CoreI7_mAVX2_NoDebug
     - rsource_url: https://cran.r-project.org/src/base-prerelease/R-latest.tar.gz
       rversion: r-patched
       cran: true
-      MAKE_32BIT: 32-bit
-      MAKE_DISTRIBUTION: distribution
-      MARCHMTUNE: -march=corei7 -mavx -mavx2 -O3 -funroll-loops -ffast-math
-      MARCHMTUNENAME: CPU Build CoreI7 with AVX2
-      DIST_BUILD: without Debugging Symbols
-      DEPLOYNAME: CoreI7_mAVX2_NoDebug
-    - rsource_url: https://cran.r-project.org/src/base-prerelease/R-devel.tar.gz
-      rversion: r-devel
-      cran: true
       MAKE_32BIT: 32-bit DEBUG=T
       MAKE_DISTRIBUTION: distribution DEBUG=T
       MARCHMTUNE:
@@ -61,6 +52,15 @@ environment:
       MARCHMTUNENAME: CPU Build CoreI7 with AVX2
       DIST_BUILD: without Debugging Symbols
       DEPLOYNAME: CoreI7_mAVX2_NoDebug
+    - rsource_url: https://cran.r-project.org/src/base-prerelease/R-devel.tar.gz
+      rversion: r-devel
+      cran: true
+      MAKE_32BIT: 32-bit DEBUG=T
+      MAKE_DISTRIBUTION: distribution DEBUG=T
+      MARCHMTUNE:
+      MARCHMTUNENAME: CPU Build Generic
+      DIST_BUILD: with Debugging Symbols
+      DEPLOYNAME: Generic_Debug
 
 install:
     - ps: Import-Module .\scripts.ps1
