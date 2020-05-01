@@ -12,6 +12,7 @@ pacman -S --needed --noconfirm mingw-w64-{i686,x86_64}-{cairo,tk,curl}
 
 # Users who do not need it . . . call makepkg with --nocheck flag
 # https://wiki.archlinux.org/index.php/Creating_packages#check()
+# ANDRE --nocheck
 #
 # Build package (only once)
 set -o pipefail

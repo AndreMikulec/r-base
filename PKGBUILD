@@ -82,21 +82,49 @@ build() {
   MSYS="winsymlinks:lnk" cp -Rf "${srcdir}/R-source" ${srcdir}/build32
 
   # ANDRE ADDED
-  if ! test "0" = "`grep -c -e "^\s*EOPTS\s*=\s*" ${srcdir}/MkRules.local.in`"
+  #
+  # https://cran.r-project.org/doc/manuals/r-release/R-admin.html
+  #
+  # Appending More Text to Variables
+  # https://www.gnu.org/software/make/manual/make.html#Appending
+  # https://www.gnu.org/software/make/manual/make.html#Conditionals
+  #
+  # Makeconf has its variables read in.
+  # MkRules.local (MkRules.dist is a sample) has its variables read-in. (mostly = user preferences - define explicitly)
+  # MkRules.rules has its variables read in. (mostly ?= defaults - if not defined then define here)
+
+  # ANDRE
+  #
+  # If the G_FLAG is found
+  if ! test "0" = "`grep -c -e "^\s*G_FLAG\s*=\s*" ${srcdir}/MkRules.local.in`"
   then
-    if ! test "-$MARCHMTUNE-" = "--"
-    then
-      sed -i -e 's/^\s*EOPTS\s*=s*/EOPTS += $MARCHMTUNE/' ${srcdir}/MkRules.local.in
-    fi
+    sed -i -e 's/^\s*G_FLAG\s*=s*/G_FLAG = ggdb -Og/' ${srcdir}/MkRules.local.in
   else
-    if ! test "-$MARCHMTUNE-" = "--"
-    then
-      echo "EOPTS += $MARCHMTUNE" >> ${srcdir}/MkRules.local.in
-    fi
+    echo "G_FLAG = ggdb -Og" >> ${srcdir}/MkRules.local.in
   fi
 
-  # ANDRE ADDED
-  sed -i "s/\(.*\)/\1 $MARCHMTUNENAME $DIST_BUILD/" ${srcdir}/build32/VERSION-NICK
+  # ANDRE
+  #
+  # If the $MARCHMTUNE is defined
+  if ! test "-$MARCHMTUNE-" = "--"
+  then
+    echo "EOPTS += $MARCHMTUNE" >> ${srcdir}/MkRules.rules
+  fi
+  #
+  # Not used (test for the existence of EOPTS)
+  # ! test "0" = "`grep -c -e "^\s*EOPTS\s*=\s*" ${srcdir}/MkRules.rules`"
+  # Not used (replace line)
+  # sed -i -e 's/^\s*EOPTS\s*=s*/EOPTS += $MARCHMTUNE/' ${srcdir}/MkRules.rules
+  # Not used but could have used (to the current line, append new data)
+  # sed -i "s/\(.*\)/\1 $MARCHMTUNE/g" ${srcdir}/MkRules.rules
+
+  # ANDRE
+  sed -i "s/\(.*\)/\1 $MARCHMTUNENAME $DIST_BUILD/g" ${srcdir}/build32/VERSION-NICK
+  echo MARCHMTUNENAME: $MARCHMTUNENAME
+  echo     DIST_BUILD: $DIST_BUILD
+  echo cat '${srcdir}/build32/VERSION-NICK'
+  echo cat "${srcdir}/build32/VERSION-NICK"
+  cat ${srcdir}/build32/VERSION-NICK
 
   # Build 32 bit version
   msg2 "Building 32-bit version of base R..."

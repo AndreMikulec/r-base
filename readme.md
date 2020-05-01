@@ -1,33 +1,260 @@
-# Base R Installer [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/AndreMikulec/r-base?branch=master)](https://ci.appveyor.com/project/AndreMikulec/r-base)
 
-> Building base R using rtools40
+# R for windows `Generic_Debug` and `<CPU optimized>_NoDebug` Versions of Debug/Optimized for C, C++, and Fortran on 32/64 bit Windows
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/AndreMikulec/r-base?branch=master)](https://ci.appveyor.com/project/AndreMikulec/r-base)
 
-Scripts to build R for Windows using [Rtools40](https://github.com/r-windows/rtools-installer) toolchains. This version automatically gets built, checked, and deployed every day to [CRAN](https://cran.r-project.org/bin/windows/base/rdevel.html).
 
-## Build requirements
+# What is This?
 
-To build R for Windows yourself, you need:
+This repository builds *modified clones* (think of a Star Wars Clonetrooper) of the Official-Version/Patched-snapshot/Build-of-the-development (OPB) version of R
 
- - [rtools40](https://cran.r-project.org/bin/windows/Rtools/)
- - [InnoSetup 6](https://www.jrsoftware.org/isdl.php) (only required to build the full installer)
- - [MikTex 2.9](https://miktex.org/download)
+https://github.com/r-windows/r-base
 
-Rtools40 provides perl and all required system libraries so we no longer need any special "extsoft" file like we did in the past.
+Changes in this
+repository https://github.com/AndreMikulec/r-base
+include different build options
 
-## How to build yourself
+  - debugging flags
+  - optimization flags
 
-Clone or [download](https://github.com/r-windows/r-base/archive/master.zip) this repository. Optionally edit [`MkRules.local.in`](MkRules.local.in) to adjust compiler flags. Now open any rtools msys2 shell from the Windows start menu.
 
-![win10](https://user-images.githubusercontent.com/216319/73364595-1fe28080-42ab-11ea-9858-ac8c660757d6.png)
+## AppVeyor R Build Variants
 
-### Option 1: Quick development build
+Two exist: `Generic_Debug` and `<CPU optimized>_NoDebug`.
 
-The  [`./quick-build.sh`](quick-build.sh) script shows how to build a local single-architecture version of R from a source tarball.
 
-To build, run the [`./quick-build.sh`](quick-build.sh) script inside the rtools40 bash shell. This will build a complete 64-bit version of R, but not 32-bit R and also not manuals or the installer.
+### Generic_Debug Build
 
-This is useful if you want to test a patch for base R. Obviously you can adjust the [`./quick-build.sh`](quick-build.sh) script to add patches.
+The Debug version `Generic_Debug` contains R language debugging symbols.  E.g. if the debug target is Rterm.exe and the package DLL has been loaded, then when debugging the package DLL, the symbols `Rf_error` and `Rf_PrintValue` are available.
 
-### Option 2: build full installer
+See the video:
+```
+Using gdb to debug R packages with native code
+userprimary
+```
+https://vimeo.com/11937905
 
-Alternatively run [`./full-build.sh`](full-build.sh) to build the complete installer as it appears on CRAN. This can take about 2 hours and requires you have innosetup and latex installed on your machine (in addition to rtools40). The process involves building both 32 and 64 bit R, as well as pdf manuals and finally the installer program. 
+
+### CPU Optimized NoDebug Build
+
+The CPU Optimized version `<CPU optimized>_NoDebug` is built using custom optimization gcc/gfortran flag(s) available in Rtools.
+Debugging symbols are `not` included.
+
+
+# Available Point Releases
+
+One may not be aware of a new release/point_release of R. E.g. a point release is like the following: 4.0.x or 4.1.y.
+If so, inform one about it. Email to Andre_Mikulec@Homail.com.
+One then should then run the AppVeyor build to create the new release/point_releases.
+
+
+# Other: Official-Version/Patched-snapshot/Build-of-the-development (OPB) Version of R
+
+
+### Official Version of R
+
+If one may want the official version of R for windows, then one may go to any one of here: https://cran.r-project.org/bin/windows/base/, https://ftp.opencpu.org/archive/r-release/, or https://github.com/r-windows/r-base/releases.
+
+
+### Official Patched snapshot version of R
+
+If one may want the Patched snapshot build of R for windows, then one may go here: https://cran.r-project.org/bin/windows/base/rpatched.html.
+
+
+### Official Build-of-the-development version of R
+
+If one may want the Build of the development version (which will eventually become the next major release) of R for windows, then one may go here: https://cran.r-project.org/bin/windows/base/rdevel.html.
+
+
+# Differences Here compared to the (just previously mentioned) OPB Version of R
+
+From the OPB version of R for windows in the
+repository https://github.com/r-windows/r-base
+compared to this
+repository https://github.com/AndreMikulec/r-base
+differences (in here) follow.
+
+
+### Multiple build-job R version (r-patched/r-devel) and Debug/Optimization Combinations may be Attempted
+
+This is configured In the
+file https://github.com/AndreMikulec/r-base/blob/master/appveyor.yml
+```
+environment:
+  matrix:
+    - rsource_url: https://cran.r-project.org/src/base-prerelease/R-latest.tar.gz
+      rversion: r-patched / r-devel
+      cran: true
+      MAKE_32BIT: 32-bit DEBUG=T / 32-bit
+      MAKE_DISTRIBUTION: distribution DEBUG=T / distribution
+      MARCHMTUNE: / -march=corei7 -mavx -mavx2 -O3 -funroll-loops -ffast-math
+      MARCHMTUNENAME: CPU Build Generic / CPU Build CoreI7 with AVX2
+      DIST_BUILD: with Debugging Symbols / without Debugging Symbols
+      DEPLOYNAME: Generic_Debug / CoreI7_mAVX2_NoDebug
+```
+
+
+### Debugging Symbols for R (DEBUGFLAG) and R packages (G_FLAG)
+
+Because 64-bit Windows does not support dwarf-*, in the github R mirror
+file https://github.com/wch/r-source/blob/trunk/src/gnuwin32/fixed/etc/Makeconf
+```
+ifdef DEBUG
+  DLLFLAGS=
+  DEBUGFLAG=-gdwarf-2
+else
+  DLLFLAGS=-s
+  DEBUGFLAG=
+endif
+```
+and in the
+file https://github.com/AndreMikulec/r-base/blob/master/MkRules.local.in
+set (overrided), is the variable DEBUGFLAG
+```
+ifdef DEBUG
+  DEBUGFLAG = -ggdb -Og
+else
+  DEBUGFLAG =
+endif
+```
+In the
+file https://github.com/wch/r-source/blob/trunk/src/gnuwin32/MkRules.rules
+set is the default G_FLAG
+```
+G_FLAG ?= -gdwarf-2
+```
+Using
+file file https://github.com/AndreMikulec/r-base/blob/master/PKGBUILD
+```
+if ! test "0" = "`grep -c -e "^\s*G_FLAG\s*=\s*" ${srcdir}/MkRules.local.in`"
+then
+  sed -i -e 's/^\s*G_FLAG\s*=s*/G_FLAG = ggdb -Og/' ${srcdir}/MkRules.local.in
+else
+  echo "G_FLAG = ggdb -Og" >> ${srcdir}/MkRules.local.in
+fi
+```
+set (overrided) is the variable G_FLAG in the
+file https://github.com/AndreMikulec/r-base/blob/master/MkRules.local.in
+
+
+### Optimization Flags for R and R packages
+
+Because, of the various custom debug/optimization runs of these AppVeyor build-jobs
+in the github R mirror
+file https://github.com/wch/r-source/blob/trunk/src/gnuwin32/MkRules.rules
+in the OPB version of R the variable EOPTS
+```
+EOPTS ?= -mfpmath=sse -msse2 -mstackrealign
+```
+is set (if the value does not already exist in the
+file https://github.com/wch/r-source/blob/trunk/src/gnuwin32/fixed/etc/Makeconf).
+However, in the
+file https://github.com/AndreMikulec/r-base/blob/master/PKGBUILD
+to the
+file https://github.com/AndreMikulec/r-base/blob/master/MkRules.local.in
+added (appended to) the previous EOPTS value, if any, is the `$MARCHMTUNE`
+```
+if ! test "-$MARCHMTUNE-" = "--"
+then
+  echo "EOPTS += $MARCHMTUNE" >> ${srcdir}/MkRules.rules
+fi
+```
+
+
+### Debug Builds and Optimization Builds
+
+In the
+file https://github.com/AndreMikulec/r-base/blob/master/PKGBUILD
+to make build-jobs process flexible, changed, is from
+```
+make 32-bit
+```
+to
+```
+make $MAKE_32BIT
+```
+meaning
+*make 32-bit DEBUG=T* or *make 32-bit*
+
+In the
+file https://github.com/AndreMikulec/r-base/blob/master/PKGBUILD
+changed, is from
+```
+make distribution
+```
+to
+```
+make $MAKE_DISTRIBUTION
+```
+meaning
+*make distribution DEBUG=T* or *make distribution *
+
+
+### Debug and Optimization Description in the Version Nickname
+
+In the OPB version of R, the version nick name is set in the R mirror
+file https://github.com/wch/r-source/blob/trunk/VERSION-NICK
+In the
+file https://github.com/AndreMikulec/r-base/blob/master/PKGBUILD
+added (appended to) the
+file https://github.com/wch/r-source/blob/trunk/VERSION-NICK
+contents, are the messages `$MARCHMTUNENAME` and `$DIST_BUILD`
+```
+sed -i "s/\(.*\)/\1 $MARCHMTUNENAME $DIST_BUILD/g" ${srcdir}/build32/VERSION-NICK
+```
+
+
+### No Code Signing
+
+In the OPB version of R, the
+file https://github.com/r-windows/r-base/blob/master/appveyor.yml
+has a signing area.
+```
+Start-FileDownload $env:PfxUri -FileName $env:KeyFile
+SignFiles "${env:target}-win.exe"
+```
+Removed in this repository is the signing section. The URL PfxUri is not available.
+
+
+### R Checks are Skipped
+
+The *checks* are *not performed.*  These tests would/may cause any Appveyor build-job to use
+over one hour of allowed Appveyor build-job allowed time. In the
+file https://github.com/r-windows/r-base/blob/master/full-build.sh
+```
+MINGW_INSTALLS="mingw64" makepkg-mingw 2>&1 | tee r-devel.log
+```
+the checks are done by default.
+However, in the
+file https://github.com/AndreMikulec/r-base/blob/master/full-build.sh
+```
+MINGW_INSTALLS="mingw64" makepkg-mingw --nocheck 2>&1 | tee r-devel.log
+```
+the checks are explicity not done ( --nocheck ).
+However, in the builds of the OPB version of R, the checks had already been done! To see the check results view:
+```
+https://ftp.opencpu.org/current/check.log
+https://ftp.opencpu.org/archive/r-patched/svn_number/check.log
+https://ftp.opencpu.org/archive/r-release/R-x.y.z/check.log
+```
+
+
+### AppVeyor Build Deployments of R: `Generic_Debug` and `<CPU optimized>_NoDebug`
+
+Located near the top of the
+page https://github.com/AndreMikulec/r-base/releases
+one may get deployments from one of the `top` (recent) build-jobs.
+
+The naming format is the following.
+```
+r-base_<appveyor build iteration>-<master repository>_<rversion>_<target>_<revision>_<DEPLOYNAME>
+```
+ - rversion is r-patched or r-devel
+ - target is R-x.y.zpatched. or R-devel
+ - revision is the R SVN revision number
+ - DEPLOYNAME describes the build: debug xor optimization
+
+Expand the asset drop down arrow: [v}Asset
+and download the
+file `base_*...*.zip`
+Using an unzip software program, manually extract the R installer: R-x.y.z-win.exe.
+Next, install R.
