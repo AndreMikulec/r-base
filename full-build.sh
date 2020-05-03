@@ -12,9 +12,13 @@ pacman -S --needed --noconfirm mingw-w64-{i686,x86_64}-{cairo,tk,curl}
 
 # ANDRE
 #
+echo BUILDFLAGS: $BUILDFLAGS
+#
 if ! test "0" = `echo $BUILDFLAGS | grep -c -e "\bATLAS=TRUE\b"`
 then
+  echo BEGIN pacman -S --needed --noconfirm mingw-w64-{i686,x86_64}-openblas
   pacman -S --needed --noconfirm mingw-w64-{i686,x86_64}-openblas
+  echo   END pacman -S --needed --noconfirm mingw-w64-{i686,x86_64}-openblas
 fi
 
 # ANDRE --nocheck
