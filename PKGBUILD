@@ -74,21 +74,24 @@ prepare() {
 
   # Add your patches here
   patch -Np1 -i "${srcdir}/shortcut.diff"
+
+  # ANDRE SEE
+  # post release cleanups
+  # https://github.com/r-windows/r-base/commit/843173da343007abd7147f9217a0ae83f49f9178
+  #
+  sed -i "s/\(.*\)/\1 $MARCHMTUNENAME $DIST_BUILD/" VERSION-NICK
+  echo MARCHMTUNENAME: $MARCHMTUNENAME
+  echo     DIST_BUILD: $DIST_BUILD
+  echo cat  \`pwd\`/VERSION-NICK
+  echo       `pwd`/VERSION-NICK
+  cat        `pwd`/VERSION-NICK
+
 }
 
 build() {
   msg2 "Copying source files for 32-bit build..."
   rm -Rf ${srcdir}/build32
   MSYS="winsymlinks:lnk" cp -Rf "${srcdir}/R-source" ${srcdir}/build32
-
-  # ANDRE
-  # CURRENTLY NOT WORKING
-  sed -i "s/\(.*\)/\1 $MARCHMTUNENAME $DIST_BUILD/" ${srcdir}/build32/VERSION-NICK
-  echo MARCHMTUNENAME: $MARCHMTUNENAME
-  echo     DIST_BUILD: $DIST_BUILD
-  echo cat '${srcdir}/build32/VERSION-NICK'
-  echo cat "${srcdir}/build32/VERSION-NICK"
-  cat       ${srcdir}/build32/VERSION-NICK
 
   # ANDRE
   #

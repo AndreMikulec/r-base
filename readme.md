@@ -95,17 +95,16 @@ environment:
 
 ### Debug and Optimization Description in the Version Nickname
 
-(CURRENTLY NOT WORKING)
-
 In the OPB version of R, the version nick name is set in the R mirror
 file https://github.com/wch/r-source/blob/trunk/VERSION-NICK
 In the
 file https://github.com/AndreMikulec/r-base/blob/master/PKGBUILD
+in the prepare() bash function
 added (appended to) the
 file https://github.com/wch/r-source/blob/trunk/VERSION-NICK
 contents, are the messages `$MARCHMTUNENAME` and `$DIST_BUILD`
 ```
-sed -i "s/\(.*\)/\1 $MARCHMTUNENAME $DIST_BUILD/" ${srcdir}/build32/VERSION-NICK
+sed -i "s/\(.*\)/\1 $MARCHMTUNENAME $DIST_BUILD/" VERSION-NICK
 ```
 
 
