@@ -74,6 +74,7 @@ repository https://github.com/AndreMikulec/r-base
 differences (in here) follow.
 
 
+
 ### Multiple build-job R version (r-patched/r-devel) and Debug/Optimization Combinations may be Attempted
 
 This is configured In the
@@ -84,8 +85,7 @@ environment:
     - rsource_url: https://cran.r-project.org/src/base-prerelease/R-latest.tar.gz
       rversion: r-patched / r-devel
       cran: true
-      MAKE_32BIT: 32-bit DEBUG=T / 32-bit
-      MAKE_DISTRIBUTION: distribution DEBUG=T / distribution
+      BUILDFLAGS: ATLAS=TRUE ATLAS_PATH=/dev/null / DEBUG=T
       MARCHMTUNE: / -march=corei7 -mavx -mavx2 -O3 -funroll-loops -ffast-math
       MARCHMTUNENAME: CPU Build Generic / CPU Build CoreI7 with AVX2
       DIST_BUILD: with Debugging Symbols / without Debugging Symbols
@@ -179,6 +179,28 @@ fi
 ```
 
 
+### OpenBlas for Optimization
+
+In the
+file https://github.com/AndreMikulec/r-base/blob/master/full-build.sh
+to make some matrix operations faster, OpenBlas may be included.
+```
+if ! test "0" = `echo $BUILDFLAGS | grep -c -e "\bATLAS=TRUE\b"`
+then
+  pacman -S --needed --noconfirm mingw-w64-{i686,x86_64}-openblas
+fi
+```
+In the
+file https://github.com/AndreMikulec/r-base/blob/master/PKGBUILD
+the ATLAS flags are begin replaced by the OpenBlas flag.
+```
+if ! test "0" = "`grep -c -e "-lf77blas -latlas\b" ${srcdir}/build32/src/extra/blas/Makefile.win`"
+then
+  sed -i "s/-lf77blas -latlas\b/-lopenblas/" ${srcdir}/build32/src/extra/blas/Makefile.win
+fi
+```
+
+
 ### Debug Builds and Optimization Builds
 
 In the
@@ -189,9 +211,9 @@ make 32-bit
 ```
 to
 ```
-make $MAKE_32BIT
+make 32-bit $BUILDFLAGS
 ```
-meaning
+meaning (for example could be)
 *make 32-bit DEBUG=T* or *make 32-bit*
 
 In the
@@ -202,13 +224,10 @@ make distribution
 ```
 to
 ```
-make $MAKE_DISTRIBUTION
+make distribution $BUILDFLAGS
 ```
-meaning
-*make distribution DEBUG=T* or *make distribution *
-
-
-
+meaning (for example could be)
+*make distribution DEBUG=T* or *make distribution*
 
 
 ### No Code Signing

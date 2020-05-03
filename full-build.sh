@@ -10,9 +10,17 @@ pacman -S --needed --noconfirm mingw-w64-{i686,x86_64}-{gcc,gcc-fortran}
 pacman -S --needed --noconfirm mingw-w64-{i686,x86_64}-{icu,libtiff,libjpeg,libpng,pcre2,xz,bzip2,zlib}
 pacman -S --needed --noconfirm mingw-w64-{i686,x86_64}-{cairo,tk,curl}
 
+# ANDRE
+#
+if ! test "0" = `echo $BUILDFLAGS | grep -c -e "\bATLAS=TRUE\b"`
+then
+  pacman -S --needed --noconfirm mingw-w64-{i686,x86_64}-openblas
+fi
+
+# ANDRE --nocheck
+#
 # Users who do not need it . . . call makepkg with --nocheck flag
 # https://wiki.archlinux.org/index.php/Creating_packages#check()
-# ANDRE --nocheck
 #
 # Build package (only once)
 set -o pipefail

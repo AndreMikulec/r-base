@@ -95,6 +95,18 @@ build() {
 
   # ANDRE
   #
+  # The login behind not sending G_FLAG sending as
+  # a make parameter is the following.
+  # Because "Mkdist.rules G_FLAG ?=" then
+  # everytime I want to debug a package on 64 bit
+  # my debugging symbols would be written in dwarf-2.
+  # 64-bit windows can not read dwarf-2, 
+  # so the symbols are worthless.
+  # Therefore, the situation is better to 
+  # always keep sending G_FLAG="-ggdb -Og".
+  # The make runner, everytime, should not be bothered to set
+  # the make flag G_FLAG to G_FLAG="-ggdb -Og"
+  #
   # If the G_FLAG is found
   if ! test "0" = "`grep -c -e "^\s*G_FLAG\s*?\?+\?=\s*" ${srcdir}/MkRules.local.in`"
   then
@@ -107,10 +119,12 @@ build() {
   cat       ${srcdir}/MkRules.local.in
 
   # ANDRE
+  #
   # Need to be here. After MkRules.local is processed, then MkRules.rules is processed.
-  # However, EOPTS is defined in MkRules.rules and I want to append more flages to EOPTS.
-  # Also, to the file, I can not seem to  append a 2nd line.
-  #   maybe this is because GNU Make "deferral" just replaces the variable definition ?? 
+  # On the EOPTS variable I want my flags to be last, so that my flags override earlier values.
+  # However, EOPTS is defined in MkRules.rules and I want to append more flags to EOPTS.
+  # In MkRules.rules, I can not use "EOPTS += rules flags" because if so the
+  # final result would be EOPTS=my flags rules flags, therefore my flags would NOT BE last. 
   #
   # If the EOPTS is found
   # ANDRE
@@ -158,20 +172,43 @@ build() {
   echo cat "${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf"
   cat       ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
 
+  # ANDRE
+  #
+  # OpenBlas
+  # Thanks to Avraham Adler and Jeroen Ooms
+  #
+  # (The second half is about OpenBlas)
+  # Inno Setup hardcoded? #13
+  # https://github.com/r-windows/r-base/issues/13
+  #
+  # Using external BLAS not compiling #14
+  # https://github.com/r-windows/r-base/issues/14
+  #
+  # Update MkRules.local.in #15
+  # Allow for external BLAS like OPEN_BLAS on Windows. Access existing variable in MkRules.dist
+  # https://github.com/r-windows/r-base/pull/15
+  #
+  if ! test "0" = "`grep -c -e "-lf77blas -latlas\b" ${srcdir}/build32/src/extra/blas/Makefile.win`"
+  then
+    sed -i "s/-lf77blas -latlas\b/-lopenblas/" ${srcdir}/build32/src/extra/blas/Makefile.win
+  fi
+  echo cat '${srcdir}/build32/src/extra/blas/Makefile.win'
+  echo cat "${srcdir}/build32/src/extra/blas/Makefile.win"
+  cat       ${srcdir}/build32/src/extra/blas/Makefile.win
 
   # Build 32 bit version
   msg2 "Building 32-bit version of base R..."
   cd "${srcdir}/build32/src/gnuwin32"
   sed -e "s|@win@|32|" -e "s|@texindex@||" -e "s|@home32@||" "${srcdir}/MkRules.local.in" > MkRules.local
   #make 32-bit SHELL='sh -x'
-  make $MAKE_32BIT
+  make 32-bit $BUILDFLAGS
   
   # Build 64 bit + docs and installers
   msg2 "Building 64-bit distribution"
   cd "${srcdir}/R-source/src/gnuwin32"
   TEXINDEX=$(cygpath -m $(which texindex))  
   sed -e "s|@win@|64|" -e "s|@texindex@|${TEXINDEX}|" -e "s|@home32@|${srcdir}/build32|" "${srcdir}/MkRules.local.in" > MkRules.local
-  make $MAKE_DISTRIBUTION
+  make distribution $BUILDFLAGS
 }
 
 check(){
