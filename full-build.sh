@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+
+set -v -x
+set -v -x
+
 cd "$(dirname "$0")"
 
 # Cleanup
@@ -32,3 +36,5 @@ MINGW_INSTALLS="mingw64" makepkg-mingw --nocheck 2>&1 | tee r-devel.log
 
 # Copy installer to root directory
 cp -f src/R-source/src/gnuwin32/installer/*.exe .
+
+set +v +x
