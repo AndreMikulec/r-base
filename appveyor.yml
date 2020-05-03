@@ -28,7 +28,7 @@ environment:
     - rsource_url: https://cran.r-project.org/src/base-prerelease/R-latest.tar.gz
       rversion: r-patched
       cran: true
-      BUILDFLAGS: ATLAS=TRUE ATLAS_PATH=/dev/null
+      BUILDFLAGS: USE_ATLAS=TRUE ATLAS_PATH=/dev/null
       MARCHMTUNE: -march=corei7 -mavx -mavx2 -O3 -funroll-loops -ffast-math
       MARCHMTUNENAME: CPU Build CoreI7 with AVX2
       DIST_BUILD: without Debugging Symbols
@@ -44,7 +44,7 @@ environment:
     - rsource_url: https://cran.r-project.org/src/base-prerelease/R-devel.tar.gz
       rversion: r-devel
       cran: true
-      BUILDFLAGS: ATLAS=TRUE ATLAS_PATH=/dev/null
+      BUILDFLAGS: USE_ATLAS=TRUE ATLAS_PATH=/dev/null
       MARCHMTUNE: -march=corei7 -mavx -mavx2 -O3 -funroll-loops -ffast-math
       MARCHMTUNENAME: CPU Build CoreI7 with AVX2
       DIST_BUILD: without Debugging Symbols

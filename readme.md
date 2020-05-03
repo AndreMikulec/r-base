@@ -85,7 +85,7 @@ environment:
     - rsource_url: https://cran.r-project.org/src/base-prerelease/R-latest.tar.gz
       rversion: r-patched / r-devel
       cran: true
-      BUILDFLAGS: ATLAS=TRUE ATLAS_PATH=/dev/null / DEBUG=T
+      BUILDFLAGS: USE_ATLAS=TRUE ATLAS_PATH=/dev/null / DEBUG=T
       MARCHMTUNE: / -march=corei7 -mavx -mavx2 -O3 -funroll-loops -ffast-math
       MARCHMTUNENAME: CPU Build Generic / CPU Build CoreI7 with AVX2
       DIST_BUILD: with Debugging Symbols / without Debugging Symbols
@@ -185,7 +185,7 @@ In the
 file https://github.com/AndreMikulec/r-base/blob/master/full-build.sh
 to make some matrix operations faster, OpenBlas may be included.
 ```
-if ! test "0" = `echo $BUILDFLAGS | grep -c -e "\bATLAS=TRUE\b"`
+if ! test "0" = `echo $BUILDFLAGS | grep -c -e "\bUSE_ATLAS=TRUE\b"`
 then
   pacman -S --needed --noconfirm mingw-w64-{i686,x86_64}-openblas
 fi
