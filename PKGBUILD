@@ -114,9 +114,12 @@ build() {
   else
     echo "G_FLAG = -ggdb -Og" >> ${srcdir}/MkRules.local.in
   fi
+  echo '$(info $$G_FLAG is [${G_FLAG}])' >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
+  #
   echo cat '${srcdir}/MkRules.local.in'
   echo cat "${srcdir}/MkRules.local.in"
   cat       ${srcdir}/MkRules.local.in
+
 
   # ANDRE
   #
@@ -140,6 +143,7 @@ build() {
       echo "EOPTS += $MARCHMTUNE" >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
     fi
   fi
+  echo '$(info $$EOPTS is [${EOPTS}])' >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
   #
   echo cat '${srcdir}/build32/src/gnuwin32/MkRules.rules'
   echo cat "${srcdir}/build32/src/gnuwin32/MkRules.rules"
@@ -168,6 +172,9 @@ build() {
   else
     echo "DEBUGFLAG = -ggdb -Og" >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
   fi
+  echo '$(info $$DEBUG is [${DEBUG}])'         >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
+  echo '$(info $$DEBUGFLAG is [${DEBUGFLAG}])' >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
+  #
   echo cat '${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf'
   echo cat "${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf"
   cat       ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
@@ -192,6 +199,9 @@ build() {
   then
     sed -i "s/-lf77blas -latlas\b/-lopenblas/" ${srcdir}/build32/src/extra/blas/Makefile.win
   fi
+  echo '$(info $$USE_ATLAS is [${USE_ATLAS}])'   >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
+  echo '$(info $$ATLAS_PATH is [${ATLAS_PATH}])' >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
+  #
   echo cat '${srcdir}/build32/src/extra/blas/Makefile.win'
   echo cat "${srcdir}/build32/src/extra/blas/Makefile.win"
   cat       ${srcdir}/build32/src/extra/blas/Makefile.win
