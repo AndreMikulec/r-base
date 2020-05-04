@@ -33,8 +33,3 @@ HOME32 = @home32@
 
 ## Fix for MiKTeX removing texi2dvi
 TEXI2DVI = TEXINDEX=@texindex@ texify
-
-# ANDRE
-ifdef DEBUG
-  G_FLAG =
-endif
