@@ -112,9 +112,11 @@ build() {
   then
     sed -i "s/^\s*G_FLAG\s*?\?+\?=.*/G_FLAG = -ggdb -Og/" ${srcdir}/MkRules.local.in
   else
+    echo -e "\n"
     echo "G_FLAG = -ggdb -Og" >> ${srcdir}/MkRules.local.in
   fi
-  echo '$(info $$G_FLAG is [${G_FLAG}])' >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
+  echo -e "\n" >> ${srcdir}/MkRules.local.in
+  echo '$(info $$G_FLAG is [${G_FLAG}])' >> ${srcdir}/MkRules.local.in
   #
   echo cat '${srcdir}/MkRules.local.in'
   echo cat "${srcdir}/MkRules.local.in"
@@ -140,9 +142,11 @@ build() {
   else
     if ! test "-$MARCHMTUNE-" = "--"
     then
+      echo -e "\n" >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
       echo "EOPTS += $MARCHMTUNE" >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
     fi
   fi
+  echo -e "\n" >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
   echo '$(info $$EOPTS is [${EOPTS}])' >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
   #
   echo cat '${srcdir}/build32/src/gnuwin32/MkRules.rules'
@@ -161,6 +165,7 @@ build() {
   #   Multiline file
   #     sed -e "s/\(^\s*EOPTS\s*?\?+\?=.*\)/\1 $MARCHMTUNE/" MkRules.rules
   # To the file append a new line
+  # echo -e "\n" >> ${srcdir}/MkRules.rules
   # echo "EOPTS += $MARCHMTUNE" >> ${srcdir}/MkRules.rules
 
   # ANDRE
@@ -170,9 +175,12 @@ build() {
   then
     sed -i -e "s/^\s*DEBUGFLAG\s*?\?+\?=.*/DEBUGFLAG = -ggdb -Og/" ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
   else
+    echo -e "\n" >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
     echo "DEBUGFLAG = -ggdb -Og" >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
   fi
+  echo -e "\n" >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
   echo '$(info $$DEBUG is [${DEBUG}])'         >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
+  echo -e "\n" >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
   echo '$(info $$DEBUGFLAG is [${DEBUGFLAG}])' >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
   #
   echo cat '${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf'
@@ -199,7 +207,9 @@ build() {
   then
     sed -i "s/-lf77blas -latlas\b/-lopenblas/" ${srcdir}/build32/src/extra/blas/Makefile.win
   fi
+  echo -e "\n" >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
   echo '$(info $$USE_ATLAS is [${USE_ATLAS}])'   >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
+  echo -e "\n" >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
   echo '$(info $$ATLAS_PATH is [${ATLAS_PATH}])' >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
   #
   echo cat '${srcdir}/build32/src/extra/blas/Makefile.win'
