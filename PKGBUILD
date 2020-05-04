@@ -112,7 +112,7 @@ build() {
   then
     sed -i "s/^\s*G_FLAG\s*?\?+\?=.*/G_FLAG = -ggdb -Og/" ${srcdir}/MkRules.local.in
   else
-    echo -e "\n"
+    echo -e "\n" >> ${srcdir}/MkRules.local.in
     echo "G_FLAG = -ggdb -Og" >> ${srcdir}/MkRules.local.in
   fi
   echo -e "\n" >> ${srcdir}/MkRules.local.in
