@@ -14,7 +14,7 @@ repository https://github.com/AndreMikulec/r-base
 include different build options
 
   - debugging flags
-  - optimization flags
+  - optimization flags and/or OpenBlas
 
 
 ## AppVeyor R Build Variants
