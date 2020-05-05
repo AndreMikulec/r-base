@@ -178,10 +178,10 @@ build() {
     echo -e "\n" >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
     echo "DEBUGFLAG = -ggdb -Og" >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
   fi
-  echo -e "\n" >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
-  echo '$(info $$DEBUG is [${DEBUG}])'         >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
-  echo -e "\n" >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
-  echo '$(info $$DEBUGFLAG is [${DEBUGFLAG}])' >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
+  echo -e "\n" >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
+  echo '$(info $$DEBUG is [${DEBUG}])'         >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
+  echo -e "\n" >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
+  echo '$(info $$DEBUGFLAG is [${DEBUGFLAG}])' >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
   #
   echo cat '${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf'
   echo cat "${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf"
