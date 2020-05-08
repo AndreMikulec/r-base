@@ -1,3 +1,10 @@
 R-devel
 R-devel.tar.gz
 ANDRENOTES.txt
+R-*.exe
+R-source.tar.gz
+cacert.pem
+pkg/*
+src/*
+r-devel.log
+r-installer-*.tar.xz
