@@ -173,7 +173,9 @@ build() {
   # If the DEBUGFLAG is found
   if ! test "0" = "`grep -c -e "^\s*DEBUGFLAG\s*?\?+\?=\s*" ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf`"
   then
-    sed -i -e "s/^\s*DEBUGFLAG\s*?\?+\?=.*/DEBUGFLAG = -ggdb -Og/" ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
+    sed -i -e "s/-gdwarf-2/-ggdb -Og/" ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
+    # WOULD HAVE ACCIDENTALLY done WHEN not DEBUG=T set DEBUGFLAG = -ggdb -Og # so that is wrong!
+    # sed -i -e "s/^\s*DEBUGFLAG\s*?\?+\?=.*/DEBUGFLAG = -ggdb -Og/" ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
   else
     echo -e "\n" >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
     echo "DEBUGFLAG = -ggdb -Og" >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
