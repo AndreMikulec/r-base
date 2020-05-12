@@ -2,6 +2,16 @@
 # R for windows `Generic_Debug` and `<CPU optimized>_NoDebug` Versions of Debug/Optimized for C, C++, and Fortran on 32/64 bit Windows
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/AndreMikulec/r-base?branch=master)](https://ci.appveyor.com/project/AndreMikulec/r-base)
 
+# OUT OF ORDER (UNTIL FURTHER NOTICE)
+
+# Bug 17790 - windows 64 R build: "make distribution": EOPTS in the Mkrules.rules file is being ignore
+https://bugs.r-project.org/bugzilla/show_bug.cgi?id=17790
+
+# Bug 17789 - windows 64 R build: "make distribution" is skipping or ignoring the Mkrules.local file
+https://bugs.r-project.org/bugzilla/show_bug.cgi?id=17789
+
+# Bug 17792 - windows 64 R build: "make distribution" DEBUG=T is skipping or ignoring the Mkrules.local file
+https://bugs.r-project.org/bugzilla/show_bug.cgi?id=17792
 
 # What is This?
 
