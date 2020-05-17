@@ -127,13 +127,13 @@ build() {
   # the make flag G_FLAG to G_FLAG="-ggdb -Og"
   #
   # If the QPDF flag is found (NOT WORKING: RETURN ANOTHER DAY)
-#  if ! test "0" = "`grep -c -e "^\s*QPDF\s*?\?+\?=\s*" ${srcdir}/MkRules.local.in`"
-#  then
-#    sed -i "s|^\s*QPDF\s*?\?+\?=.*|QPDF = $(cygpath ${APPVEYOR_BUILD_FOLDER})/qpdf-10.0.1|" ${srcdir}/MkRules.local.in
-#  else
-#    echo -e "\n" >> ${srcdir}/MkRules.local.in
-#    echo "QPDF = $(cygpath ${APPVEYOR_BUILD_FOLDER})/qpdf-10.0.1" >> ${srcdir}/MkRules.local.in
-#  fi
+  if ! test "0" = "`grep -c -e "^\s*QPDF\s*?\?+\?=\s*" ${srcdir}/MkRules.local.in`"
+  then
+    sed -i "s|^\s*QPDF\s*?\?+\?=.*|QPDF = $(cygpath ${APPVEYOR_BUILD_FOLDER})/qpdf-10.0.1|" ${srcdir}/MkRules.local.in
+  else
+    echo -e "\n" >> ${srcdir}/MkRules.local.in
+    echo "QPDF = $(cygpath ${APPVEYOR_BUILD_FOLDER})/qpdf-10.0.1" >> ${srcdir}/MkRules.local.in
+  fi
   #
   # If the G_FLAG is found
   if ! test "0" = "`grep -c -e "^\s*G_FLAG\s*?\?+\?=\s*" ${srcdir}/MkRules.local.in`"
