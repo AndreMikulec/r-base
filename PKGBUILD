@@ -140,7 +140,7 @@ build() {
   then
     sed -i "s/^\s*G_FLAG\s*?\?+\?=.*/G_FLAG = -ggdb -Og/" ${srcdir}/MkRules.local.in
   else
-    echo -e "\n" >> ${srcdir}/MkRules.local.in
+    echo -e "\n"              >> ${srcdir}/MkRules.local.in
     echo "G_FLAG = -ggdb -Og" >> ${srcdir}/MkRules.local.in
   fi
   echo -e "\n" >> ${srcdir}/MkRules.local.in
@@ -169,11 +169,11 @@ build() {
   else
     if ! test "-$MARCHMTUNE-" = "--"
     then
-      echo -e "\n" >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
+      echo -e "\n"                >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
       echo "EOPTS += $MARCHMTUNE" >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
     fi
   fi
-  echo -e "\n" >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
+  echo -e "\n"                         >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
   echo '$(info $$EOPTS is [${EOPTS}])' >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
   #
   echo cat '${srcdir}/build32/src/gnuwin32/MkRules.rules'
@@ -191,7 +191,7 @@ build() {
   else
     if ! test "-$MARCHMTUNE-" = "--"
     then
-      echo -e "\n" >> ${srcdir}/R-source/src/gnuwin32/MkRules.rules
+      echo -e "\n"                >> ${srcdir}/R-source/src/gnuwin32/MkRules.rules
       echo "EOPTS += $MARCHMTUNE" >> ${srcdir}/R-source/src/gnuwin32/MkRules.rules
     fi
   fi
@@ -229,9 +229,9 @@ build() {
     echo -e "\n" >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
     echo "DEBUGFLAG = -ggdb -Og" >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
   fi
-  echo -e "\n" >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
+  echo -e "\n"                                 >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
   echo '$(info $$DEBUG is [${DEBUG}])'         >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
-  echo -e "\n" >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
+  echo -e "\n"                                 >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
   echo '$(info $$DEBUGFLAG is [${DEBUGFLAG}])' >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
   #
   echo cat '${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf'
@@ -248,9 +248,9 @@ build() {
     echo -e "\n" >> ${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf
     echo "DEBUGFLAG = -ggdb -Og" >> ${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf
   fi
-  echo -e "\n" >> ${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf
+  echo -e "\n"                                 >> ${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf
   echo '$(info $$DEBUG is [${DEBUG}])'         >> ${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf
-  echo -e "\n" >> ${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf
+  echo -e "\n"                                 >> ${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf
   echo '$(info $$DEBUGFLAG is [${DEBUGFLAG}])' >> ${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf
   #
   echo cat '${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf'
@@ -281,9 +281,9 @@ build() {
       sed -i "s/-lf77blas -latlas\b/-lopenblas/" ${srcdir}/build32/src/extra/blas/Makefile.win
     fi
   fi
-  echo -e "\n" >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
+  echo -e "\n"                                   >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
   echo '$(info $$USE_ATLAS is [${USE_ATLAS}])'   >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
-  echo -e "\n" >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
+  echo -e "\n"                                   >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
   echo '$(info $$ATLAS_PATH is [${ATLAS_PATH}])' >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
   #
   echo cat '${srcdir}/build32/src/extra/blas/Makefile.win'
@@ -298,9 +298,9 @@ build() {
       sed -i "s/-lf77blas -latlas\b/-lopenblas/" ${srcdir}/R-source/src/extra/blas/Makefile.win
     fi
   fi
-  echo -e "\n" >> ${srcdir}/R-source/src/gnuwin32/MkRules.rules
+  echo -e "\n"                                   >> ${srcdir}/R-source/src/gnuwin32/MkRules.rules
   echo '$(info $$USE_ATLAS is [${USE_ATLAS}])'   >> ${srcdir}/R-source/src/gnuwin32/MkRules.rules
-  echo -e "\n" >> ${srcdir}/R-source/src/gnuwin32/MkRules.rules
+  echo -e "\n"                                   >> ${srcdir}/R-source/src/gnuwin32/MkRules.rules
   echo '$(info $$ATLAS_PATH is [${ATLAS_PATH}])' >> ${srcdir}/R-source/src/gnuwin32/MkRules.rules
   #
   echo cat '${srcdir}/R-source/src/extra/blas/Makefile.win'
