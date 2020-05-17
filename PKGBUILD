@@ -126,14 +126,14 @@ build() {
   # The make runner, everytime, should not be bothered to set
   # the make flag G_FLAG to G_FLAG="-ggdb -Og"
   #
-  # If the QPDF flag is found
-  if ! test "0" = "`grep -c -e "^\s*QPDF\s*?\?+\?=\s*" ${srcdir}/MkRules.local.in`"
-  then
-    sed -i "s|^\s*QPDF\s*?\?+\?=.*|QPDF = $(cygpath ${APPVEYOR_BUILD_FOLDER})/qpdf-10.0.1|" ${srcdir}/MkRules.local.in
-  else
-    echo -e "\n" >> ${srcdir}/MkRules.local.in
-    echo "QPDF = $(cygpath ${APPVEYOR_BUILD_FOLDER})/qpdf-10.0.1" >> ${srcdir}/MkRules.local.in
-  fi
+  # If the QPDF flag is found (NOT WORKING: RETURN ANOTHER DAY)
+#  if ! test "0" = "`grep -c -e "^\s*QPDF\s*?\?+\?=\s*" ${srcdir}/MkRules.local.in`"
+#  then
+#    sed -i "s|^\s*QPDF\s*?\?+\?=.*|QPDF = $(cygpath ${APPVEYOR_BUILD_FOLDER})/qpdf-10.0.1|" ${srcdir}/MkRules.local.in
+#  else
+#    echo -e "\n" >> ${srcdir}/MkRules.local.in
+#    echo "QPDF = $(cygpath ${APPVEYOR_BUILD_FOLDER})/qpdf-10.0.1" >> ${srcdir}/MkRules.local.in
+#  fi
   #
   # If the G_FLAG is found
   if ! test "0" = "`grep -c -e "^\s*G_FLAG\s*?\?+\?=\s*" ${srcdir}/MkRules.local.in`"
@@ -314,7 +314,7 @@ build() {
   sed -e "s|@win@|32|" -e "s|@texindex@||" -e "s|@home32@||" "${srcdir}/MkRules.local.in" > MkRules.local
 
   echo BEGINNING 32-bit MkRules.local.in MkRules.local
-  echo 'diff ${srcdir}/MkRules.local.in MkRules.local'
+  echo "diff ${srcdir}/MkRules.local.in MkRules.local"
         diff ${srcdir}/MkRules.local.in MkRules.local
   ls -alrt  MkRules.local
   echo 'cat MkRules.local'
@@ -332,7 +332,7 @@ build() {
   sed -e "s|@win@|64|" -e "s|@texindex@|${TEXINDEX}|" -e "s|@home32@|${srcdir}/build32|" "${srcdir}/MkRules.local.in" > MkRules.local
 
   echo BEGINNING distribution MkRules.local.in MkRules.local
-  echo 'diff ${srcdir}/MkRules.local.in MkRules.local'
+  echo "diff ${srcdir}/MkRules.local.in MkRules.local"
         diff ${srcdir}/MkRules.local.in MkRules.local
   ls -alrt  MkRules.local
   echo 'cat MkRules.local'
