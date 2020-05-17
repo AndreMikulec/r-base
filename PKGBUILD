@@ -314,8 +314,8 @@ build() {
   sed -e "s|@win@|32|" -e "s|@texindex@||" -e "s|@home32@||" "${srcdir}/MkRules.local.in" > MkRules.local
 
   echo BEGINNING 32-bit MkRules.local.in MkRules.local
-  # echo "diff ${srcdir}/MkRules.local.in MkRules.local"
-  #       diff ${srcdir}/MkRules.local.in MkRules.local
+  # echo "diff -u ${srcdir}/MkRules.local.in MkRules.local"
+  #       diff -u ${srcdir}/MkRules.local.in MkRules.local
   # ls -alrt  MkRules.local
   echo 'cat MkRules.local'
         cat MkRules.local
@@ -332,8 +332,8 @@ build() {
   sed -e "s|@win@|64|" -e "s|@texindex@|${TEXINDEX}|" -e "s|@home32@|${srcdir}/build32|" "${srcdir}/MkRules.local.in" > MkRules.local
 
   echo BEGINNING distribution MkRules.local.in MkRules.local
-  # echo "diff ${srcdir}/MkRules.local.in MkRules.local"
-  #       diff ${srcdir}/MkRules.local.in MkRules.local
+  # echo "diff -u ${srcdir}/MkRules.local.in MkRules.local"
+  #       diff -u ${srcdir}/MkRules.local.in MkRules.local
   # ls -alrt  MkRules.local
   echo 'cat MkRules.local'
         cat MkRules.local
