@@ -321,7 +321,7 @@ build() {
         cat MkRules.local
 
   #make 32-bit SHELL='sh -x'
-  make 32-bit $BUILDFLAGS
+  make -d 32-bit $BUILDFLAGS
 
   echo ENDING 32-bit
 
@@ -338,7 +338,7 @@ build() {
   echo 'cat MkRules.local'
         cat MkRules.local
 
-  make distribution $BUILDFLAGS
+  make -d distribution $BUILDFLAGS
 
   echo ENDING distribution
 }
