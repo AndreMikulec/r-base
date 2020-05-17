@@ -126,6 +126,15 @@ build() {
   # The make runner, everytime, should not be bothered to set
   # the make flag G_FLAG to G_FLAG="-ggdb -Og"
   #
+  # If the QPDF flag is found
+  if ! test "0" = "`grep -c -e "^\s*QPDF\s*?\?+\?=\s*" ${srcdir}/MkRules.local.in`"
+  then
+    sed -i "s|^\s*QPDF\s*?\?+\?=.*|QPDF = $(cygpath ${APPVEYOR_BUILD_FOLDER})/qpdf-10.0.1|" ${srcdir}/MkRules.local.in
+  else
+    echo -e "\n" >> ${srcdir}/MkRules.local.in
+    echo "QPDF = $(cygpath ${APPVEYOR_BUILD_FOLDER})/qpdf-10.0.1" >> ${srcdir}/MkRules.local.in
+  fi
+  #
   # If the G_FLAG is found
   if ! test "0" = "`grep -c -e "^\s*G_FLAG\s*?\?+\?=\s*" ${srcdir}/MkRules.local.in`"
   then
@@ -140,7 +149,6 @@ build() {
   echo cat '${srcdir}/MkRules.local.in'
   echo cat "${srcdir}/MkRules.local.in"
   cat       ${srcdir}/MkRules.local.in
-
 
   # ANDRE
   #
@@ -171,6 +179,28 @@ build() {
   echo cat '${srcdir}/build32/src/gnuwin32/MkRules.rules'
   echo cat "${srcdir}/build32/src/gnuwin32/MkRules.rules"
   cat       ${srcdir}/build32/src/gnuwin32/MkRules.rules
+  #
+  # If the EOPTS is found
+  # ANDRE
+  if ! test "0" = "`grep -c -e "^\s*EOPTS\s*?\?+\?=\s*" ${srcdir}/R-source/src/gnuwin32/MkRules.rules`"
+  then
+    if ! test "-$MARCHMTUNE-" = "--"
+    then
+      sed -i "s/\(^\s*EOPTS\s*?\?+\?=.*\)/\1 $MARCHMTUNE/" ${srcdir}/R-source/src/gnuwin32/MkRules.rules
+    fi
+  else
+    if ! test "-$MARCHMTUNE-" = "--"
+    then
+      echo -e "\n" >> ${srcdir}/R-source/src/gnuwin32/MkRules.rules
+      echo "EOPTS += $MARCHMTUNE" >> ${srcdir}/R-source/src/gnuwin32/MkRules.rules
+    fi
+  fi
+  echo -e "\n" >> ${srcdir}/R-source/src/gnuwin32/MkRules.rules
+  echo '$(info $$EOPTS is [${EOPTS}])' >> ${srcdir}/R-source/src/gnuwin32/MkRules.rules
+  #
+  echo cat '${srcdir}/R-source/src/gnuwin32/MkRules.rules'
+  echo cat "${srcdir}/R-source/src/gnuwin32/MkRules.rules"
+  cat       ${srcdir}/R-source/src/gnuwin32/MkRules.rules
   #
   # Sample code (with assigner of "+=" or "?=" "=")
   # Test for the existence of EOPTS
@@ -207,6 +237,25 @@ build() {
   echo cat '${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf'
   echo cat "${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf"
   cat       ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
+  #
+  # If the DEBUGFLAG is found
+  if ! test "0" = "`grep -c -e "^\s*DEBUGFLAG\s*?\?+\?=\s*" ${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf`"
+  then
+    sed -i -e "s/-gdwarf-2/-ggdb -Og/" ${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf
+    # WOULD HAVE ACCIDENTALLY done WHEN not DEBUG=T set DEBUGFLAG = -ggdb -Og # so that is wrong!
+    # sed -i -e "s/^\s*DEBUGFLAG\s*?\?+\?=.*/DEBUGFLAG = -ggdb -Og/" ${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf
+  else
+    echo -e "\n" >> ${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf
+    echo "DEBUGFLAG = -ggdb -Og" >> ${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf
+  fi
+  echo -e "\n" >> ${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf
+  echo '$(info $$DEBUG is [${DEBUG}])'         >> ${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf
+  echo -e "\n" >> ${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf
+  echo '$(info $$DEBUGFLAG is [${DEBUGFLAG}])' >> ${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf
+  #
+  echo cat '${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf'
+  echo cat "${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf"
+  cat       ${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf
 
   # ANDRE
   #
@@ -224,6 +273,7 @@ build() {
   # Allow for external BLAS like OPEN_BLAS on Windows. Access existing variable in MkRules.dist
   # https://github.com/r-windows/r-base/pull/15
   #
+  # If the USE_ATLAS is found
   if ! test "0" = `echo $BUILDFLAGS | grep -c -e "\bUSE_ATLAS=YES\b"`
   then
     if ! test "0" = "`grep -c -e "-lf77blas -latlas\b" ${srcdir}/build32/src/extra/blas/Makefile.win`"
@@ -239,6 +289,24 @@ build() {
   echo cat '${srcdir}/build32/src/extra/blas/Makefile.win'
   echo cat "${srcdir}/build32/src/extra/blas/Makefile.win"
   cat       ${srcdir}/build32/src/extra/blas/Makefile.win
+  #
+  # If the USE_ATLAS is found
+  if ! test "0" = `echo $BUILDFLAGS | grep -c -e "\bUSE_ATLAS=YES\b"`
+  then
+    if ! test "0" = "`grep -c -e "-lf77blas -latlas\b" ${srcdir}/R-source/src/extra/blas/Makefile.win`"
+    then
+      sed -i "s/-lf77blas -latlas\b/-lopenblas/" ${srcdir}/R-source/src/extra/blas/Makefile.win
+    fi
+  fi
+  echo -e "\n" >> ${srcdir}/R-source/src/gnuwin32/MkRules.rules
+  echo '$(info $$USE_ATLAS is [${USE_ATLAS}])'   >> ${srcdir}/R-source/src/gnuwin32/MkRules.rules
+  echo -e "\n" >> ${srcdir}/R-source/src/gnuwin32/MkRules.rules
+  echo '$(info $$ATLAS_PATH is [${ATLAS_PATH}])' >> ${srcdir}/R-source/src/gnuwin32/MkRules.rules
+  #
+  echo cat '${srcdir}/R-source/src/extra/blas/Makefile.win'
+  echo cat "${srcdir}/R-source/src/extra/blas/Makefile.win"
+  cat       ${srcdir}/R-source/src/extra/blas/Makefile.win
+  #
 
   # Build 32 bit version
   msg2 "Building 32-bit version of base R..."
@@ -246,10 +314,11 @@ build() {
   sed -e "s|@win@|32|" -e "s|@texindex@||" -e "s|@home32@||" "${srcdir}/MkRules.local.in" > MkRules.local
 
   echo BEGINNING 32-bit MkRules.local.in MkRules.local
-  echo 'diff MkRules.local.in MkRules.local'
-  diff MkRules.local.in MkRules.local
+  echo 'diff ${srcdir}/MkRules.local.in MkRules.local'
+        diff ${srcdir}/MkRules.local.in MkRules.local
+  ls -alrt  MkRules.local
   echo 'cat MkRules.local'
-  cat MkRules.local
+        cat MkRules.local
 
   #make 32-bit SHELL='sh -x'
   make 32-bit $BUILDFLAGS
@@ -263,10 +332,11 @@ build() {
   sed -e "s|@win@|64|" -e "s|@texindex@|${TEXINDEX}|" -e "s|@home32@|${srcdir}/build32|" "${srcdir}/MkRules.local.in" > MkRules.local
 
   echo BEGINNING distribution MkRules.local.in MkRules.local
-  echo 'diff MkRules.local.in MkRules.local'
-  diff MkRules.local.in MkRules.local
+  echo 'diff ${srcdir}/MkRules.local.in MkRules.local'
+        diff ${srcdir}/MkRules.local.in MkRules.local
+  ls -alrt  MkRules.local
   echo 'cat MkRules.local'
-  cat MkRules.local
+        cat MkRules.local
 
   make distribution $BUILDFLAGS
 
