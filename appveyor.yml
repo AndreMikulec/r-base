@@ -74,9 +74,9 @@ install:
     - ps: SetTimezone
 
 build_script:
-  - ps: Start-FileDownload https://github.com/qpdf/qpdf/releases/download/release-qpdf-10.0.1/qpdf-10.0.1-bin-mingw32.zip -FileName qpdf.zip
-  - 7z l qpdf.zip
-  - 7z x "-o${APPVEYOR_BUILD_FOLDER}" qpdf.zip
+# - ps: Start-FileDownload https://github.com/qpdf/qpdf/releases/download/release-qpdf-10.0.1/qpdf-10.0.1-bin-mingw32.zip -FileName qpdf.zip
+# - 7z l qpdf.zip
+# - 7z x "-o${APPVEYOR_BUILD_FOLDER}" qpdf.zip
   - C:\rtools40\usr\bin\bash --login -c "$(cygpath ${APPVEYOR_BUILD_FOLDER})/full-build.sh"
 
 after_build:

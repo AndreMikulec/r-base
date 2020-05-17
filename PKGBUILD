@@ -50,7 +50,7 @@ source=(R-source.tar.gz::"${rsource_url:-https://cran.r-project.org/src/base-pre
     MkRules.local.in
     shortcut.diff
     create-tcltk-bundle.sh)
-  # blas.diff # OpenBLAS : instead I manually edit src/extra/blas/Makefile.win
+  # blas.diff # OpenBLAS - instead I manually edit src/extra/blas/Makefile.win
 
 # Automatic untar fails due to embedded symlinks
 noextract=(R-source.tar.gz)
@@ -60,7 +60,7 @@ sha256sums=('SKIP'
             'SKIP'
             'SKIP'
             'SKIP')
-          # 'SKIP' # OpenBLAS : instead I manually edit src/extra/blas/Makefile.win
+          # 'SKIP' # OpenBLAS - instead I manually edit src/extra/blas/Makefile.win
 
 prepare() {
   # Verify that InnoSetup is installed
@@ -92,7 +92,7 @@ prepare() {
 
   # Add your patches here
   patch -Np1 -i "${srcdir}/shortcut.diff"
-  # OpenBLAS : instead I manually edit src/extra/blas/Makefile.win
+  # OpenBLAS - instead I manually edit src/extra/blas/Makefile.win
 
   # ANDRE SEE
   # post release cleanups
