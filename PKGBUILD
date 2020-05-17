@@ -92,6 +92,7 @@ prepare() {
 
   # Add your patches here
   patch -Np1 -i "${srcdir}/shortcut.diff"
+  # OpenBLAS : instead I manually edit src/extra/blas/Makefile.win
 
   # ANDRE SEE
   # post release cleanups
