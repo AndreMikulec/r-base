@@ -244,15 +244,33 @@ build() {
   msg2 "Building 32-bit version of base R..."
   cd "${srcdir}/build32/src/gnuwin32"
   sed -e "s|@win@|32|" -e "s|@texindex@||" -e "s|@home32@||" "${srcdir}/MkRules.local.in" > MkRules.local
+
+  echo BEGINNING 32-bit MkRules.local.in MkRules.local
+  echo 'diff MkRules.local.in MkRules.local'
+  diff MkRules.local.in MkRules.local
+  echo 'cat MkRules.local'
+  cat MkRules.local
+
   #make 32-bit SHELL='sh -x'
   make 32-bit $BUILDFLAGS
-  
+
+  echo ENDING 32-bit
+
   # Build 64 bit + docs and installers
   msg2 "Building 64-bit distribution"
   cd "${srcdir}/R-source/src/gnuwin32"
   TEXINDEX=$(cygpath -m $(which texindex))  
   sed -e "s|@win@|64|" -e "s|@texindex@|${TEXINDEX}|" -e "s|@home32@|${srcdir}/build32|" "${srcdir}/MkRules.local.in" > MkRules.local
+
+  echo BEGINNING distribution MkRules.local.in MkRules.local
+  echo 'diff MkRules.local.in MkRules.local'
+  diff MkRules.local.in MkRules.local
+  echo 'cat MkRules.local'
+  cat MkRules.local
+
   make distribution $BUILDFLAGS
+
+  echo ENDING distribution
 }
 
 check(){
