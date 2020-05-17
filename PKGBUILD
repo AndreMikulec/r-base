@@ -314,14 +314,14 @@ build() {
   sed -e "s|@win@|32|" -e "s|@texindex@||" -e "s|@home32@||" "${srcdir}/MkRules.local.in" > MkRules.local
 
   echo BEGINNING 32-bit MkRules.local.in MkRules.local
-  echo "diff ${srcdir}/MkRules.local.in MkRules.local"
-        diff ${srcdir}/MkRules.local.in MkRules.local
-  ls -alrt  MkRules.local
+  # echo "diff ${srcdir}/MkRules.local.in MkRules.local"
+  #       diff ${srcdir}/MkRules.local.in MkRules.local
+  # ls -alrt  MkRules.local
   echo 'cat MkRules.local'
         cat MkRules.local
 
   #make 32-bit SHELL='sh -x'
-  make -d 32-bit $BUILDFLAGS
+  make 32-bit $BUILDFLAGS
 
   echo ENDING 32-bit
 
@@ -332,13 +332,13 @@ build() {
   sed -e "s|@win@|64|" -e "s|@texindex@|${TEXINDEX}|" -e "s|@home32@|${srcdir}/build32|" "${srcdir}/MkRules.local.in" > MkRules.local
 
   echo BEGINNING distribution MkRules.local.in MkRules.local
-  echo "diff ${srcdir}/MkRules.local.in MkRules.local"
-        diff ${srcdir}/MkRules.local.in MkRules.local
-  ls -alrt  MkRules.local
+  # echo "diff ${srcdir}/MkRules.local.in MkRules.local"
+  #       diff ${srcdir}/MkRules.local.in MkRules.local
+  # ls -alrt  MkRules.local
   echo 'cat MkRules.local'
         cat MkRules.local
 
-  make -d distribution $BUILDFLAGS
+  make distribution $BUILDFLAGS
 
   echo ENDING distribution
 }
