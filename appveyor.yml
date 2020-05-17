@@ -13,7 +13,7 @@ skip_tags: true
 
 branches:
   only:
-    - NOBRANCH
+    - master
 
 environment:
   RTOOLS_ARCH: x86_64
