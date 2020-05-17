@@ -24,6 +24,22 @@ makedepends=("${MINGW_PACKAGE_PREFIX}-bzip2"
              "texinfo"
              "texinfo-tex"
              "sed")
+
+# proper packaging
+#
+# OpenBLAS
+# Building R 4+ for Windows with OpenBLAS
+# May 12, 2020
+# By Avi
+# https://www.r-bloggers.com/building-r-4-for-windows-with-openblas/
+# https://www.avrahamadler.com/2020/05/12/building-r-4-for-windows-with-openblas/
+#
+if ! test "0" = `echo $BUILDFLAGS | grep -c -e "\bUSE_ATLAS=YES\b"`
+then
+  makedepends+=("${MINGW_PACKAGE_PREFIX}-openblas")
+fi
+
+
 options=('staticlibs')
 license=("GPL")
 url="https://www.r-project.org/"
@@ -34,6 +50,7 @@ source=(R-source.tar.gz::"${rsource_url:-https://cran.r-project.org/src/base-pre
     MkRules.local.in
     shortcut.diff
     create-tcltk-bundle.sh)
+  # blas.diff # OpenBLAS : instead I manually edit src/extra/blas/Makefile.win
 
 # Automatic untar fails due to embedded symlinks
 noextract=(R-source.tar.gz)
@@ -43,6 +60,7 @@ sha256sums=('SKIP'
             'SKIP'
             'SKIP'
             'SKIP')
+          # 'SKIP' # OpenBLAS : instead I manually edit src/extra/blas/Makefile.win
 
 prepare() {
   # Verify that InnoSetup is installed
@@ -205,9 +223,12 @@ build() {
   # Allow for external BLAS like OPEN_BLAS on Windows. Access existing variable in MkRules.dist
   # https://github.com/r-windows/r-base/pull/15
   #
-  if ! test "0" = "`grep -c -e "-lf77blas -latlas\b" ${srcdir}/build32/src/extra/blas/Makefile.win`"
+  if ! test "0" = `echo $BUILDFLAGS | grep -c -e "\bUSE_ATLAS=YES\b"`
   then
-    sed -i "s/-lf77blas -latlas\b/-lopenblas/" ${srcdir}/build32/src/extra/blas/Makefile.win
+    if ! test "0" = "`grep -c -e "-lf77blas -latlas\b" ${srcdir}/build32/src/extra/blas/Makefile.win`"
+    then
+      sed -i "s/-lf77blas -latlas\b/-lopenblas/" ${srcdir}/build32/src/extra/blas/Makefile.win
+    fi
   fi
   echo -e "\n" >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
   echo '$(info $$USE_ATLAS is [${USE_ATLAS}])'   >> ${srcdir}/build32/src/gnuwin32/MkRules.rules
