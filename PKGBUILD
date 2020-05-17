@@ -21,6 +21,7 @@ makedepends=("${MINGW_PACKAGE_PREFIX}-bzip2"
              "${MINGW_PACKAGE_PREFIX}-tk"
              "${MINGW_PACKAGE_PREFIX}-xz"
              "${MINGW_PACKAGE_PREFIX}-zlib"
+             "${MINGW_PACKAGE_PREFIX}-qpdf"
              "texinfo"
              "texinfo-tex"
              "sed")
@@ -129,11 +130,10 @@ build() {
   # If the QPDF flag is found (NOT WORKING: RETURN ANOTHER DAY)
   if ! test "0" = "`grep -c -e "^\s*QPDF\s*?\?+\?=\s*" ${srcdir}/MkRules.local.in`"
   then
-    #  -m, --mixed  like --windows, but with regular slashes (C:/WINNT)
-    sed -i "s|^\s*QPDF\s*?\?+\?=.*|QPDF = $(cygpath -m ${APPVEYOR_BUILD_FOLDER})/qpdf-10.0.1|" ${srcdir}/MkRules.local.in
+    sed -i "s|^\s*QPDF\s*?\?+\?=.*|QPDF = /mingw\$(WIN)/|" ${srcdir}/MkRules.local.in
   else
     echo -e "\n" >> ${srcdir}/MkRules.local.in
-    echo "QPDF = $(cygpath ${APPVEYOR_BUILD_FOLDER})/qpdf-10.0.1" >> ${srcdir}/MkRules.local.in
+    echo "QPDF = /mingw\$(WIN)/" >> ${srcdir}/MkRules.local.in
   fi
   #
   # If the G_FLAG is found
