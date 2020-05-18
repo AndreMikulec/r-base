@@ -264,7 +264,7 @@ https://ftp.opencpu.org/archive/r-release/R-x.y.z/check.log
 ```
 
 
-### QPDF is installed into R
+### QPDF is Installed into R
 http://qpdf.sourceforge.net/files/qpdf-manual.html
 
 
