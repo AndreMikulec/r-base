@@ -25,46 +25,46 @@ environment:
 # CertKit: C:\Program Files (x86)\Windows Kits\10\App Certification Kit\appcert.exe
 # KeyFile: C:\jeroen.pfx
   matrix:
+#    - rsource_url: https://cran.r-project.org/src/base-prerelease/R-latest.tar.gz
+#      rversion: r-patched
+#      cran: true
+#      BUILDFLAGS: 'DEBUG=T USE_ATLAS=YES ATLAS_PATH=/mingw$(WIN)/lib/'
+#      MARCHMTUNE: '-march=corei7 -mavx -mavx2     -funroll-loops -ffast-math'
+#      MARCHMTUNENAME: 'CPU Build CoreI7 with AVX2'
+#      DIST_BUILD: 'with Debugging Symbols'
+#      DEPLOYNAME: Generic_Debug_Optimize_Test
     - rsource_url: https://cran.r-project.org/src/base-prerelease/R-latest.tar.gz
       rversion: r-patched
       cran: true
-      BUILDFLAGS: 'DEBUG=T USE_ATLAS=YES ATLAS_PATH=/mingw$(WIN)/lib/'
+      BUILDFLAGS: 'USE_ATLAS=YES ATLAS_PATH=/mingw$(WIN)/lib/'
       MARCHMTUNE: '-march=corei7 -mavx -mavx2 -O3 -funroll-loops -ffast-math'
       MARCHMTUNENAME: 'CPU Build CoreI7 with AVX2'
+      DIST_BUILD: 'without Debugging Symbols'
+      DEPLOYNAME: CoreI7_mAVX2_NoDebug
+    - rsource_url: https://cran.r-project.org/src/base-prerelease/R-latest.tar.gz
+      rversion: r-patched
+      cran: true
+      BUILDFLAGS: DEBUG=T
+      MARCHMTUNE:
+      MARCHMTUNENAME: 'CPU Build Generic'
       DIST_BUILD: 'with Debugging Symbols'
-      DEPLOYNAME: Generic_Debug_Optimize_Test
-#    - rsource_url: https://cran.r-project.org/src/base-prerelease/R-latest.tar.gz
-#      rversion: r-patched
-#      cran: true
-#      BUILDFLAGS: 'USE_ATLAS=YES ATLAS_PATH=/mingw$(WIN)/lib/'
-#      MARCHMTUNE: '-march=corei7 -mavx -mavx2 -O3 -funroll-loops -ffast-math'
-#      MARCHMTUNENAME: 'CPU Build CoreI7 with AVX2'
-#      DIST_BUILD: 'without Debugging Symbols'
-#      DEPLOYNAME: CoreI7_mAVX2_NoDebug
-#    - rsource_url: https://cran.r-project.org/src/base-prerelease/R-latest.tar.gz
-#      rversion: r-patched
-#      cran: true
-#      BUILDFLAGS: DEBUG=T
-#      MARCHMTUNE:
-#      MARCHMTUNENAME: 'CPU Build Generic'
-#      DIST_BUILD: 'with Debugging Symbols'
-#      DEPLOYNAME: Generic_Debug
-#    - rsource_url: https://cran.r-project.org/src/base-prerelease/R-devel.tar.gz
-#      rversion: r-devel
-#      cran: true
-#      BUILDFLAGS: 'USE_ATLAS=YES ATLAS_PATH=/mingw$(WIN)/lib/'
-#      MARCHMTUNE: '-march=corei7 -mavx -mavx2 -O3 -funroll-loops -ffast-math'
-#      MARCHMTUNENAME: 'CPU Build CoreI7 with AVX2'
-#      DIST_BUILD: 'without Debugging Symbols'
-#      DEPLOYNAME: CoreI7_mAVX2_NoDebug
-#    - rsource_url: https://cran.r-project.org/src/base-prerelease/R-devel.tar.gz
-#      rversion: r-devel
-#      cran: true
-#      BUILDFLAGS: DEBUG=T
-#      MARCHMTUNE:
-#      MARCHMTUNENAME: 'CPU Build Generic'
-#      DIST_BUILD: 'with Debugging Symbols'
-#      DEPLOYNAME: Generic_Debug
+      DEPLOYNAME: Generic_Debug
+    - rsource_url: https://cran.r-project.org/src/base-prerelease/R-devel.tar.gz
+      rversion: r-devel
+      cran: true
+      BUILDFLAGS: 'USE_ATLAS=YES ATLAS_PATH=/mingw$(WIN)/lib/'
+      MARCHMTUNE: '-march=corei7 -mavx -mavx2 -O3 -funroll-loops -ffast-math'
+      MARCHMTUNENAME: 'CPU Build CoreI7 with AVX2'
+      DIST_BUILD: 'without Debugging Symbols'
+      DEPLOYNAME: CoreI7_mAVX2_NoDebug
+    - rsource_url: https://cran.r-project.org/src/base-prerelease/R-devel.tar.gz
+      rversion: r-devel
+      cran: true
+      BUILDFLAGS: DEBUG=T
+      MARCHMTUNE:
+      MARCHMTUNENAME: 'CPU Build Generic'
+      DIST_BUILD: 'with Debugging Symbols'
+      DEPLOYNAME: Generic_Debug
 
 install:
     - ps: Import-Module .\scripts.ps1
