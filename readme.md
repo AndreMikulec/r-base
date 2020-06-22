@@ -8,7 +8,7 @@ This repository builds *modified clones* (think of a Star Wars Clonetrooper) of 
 
 https://github.com/r-windows/r-base
 
-Changes in  this
+Changes in this
 repository https://github.com/AndreMikulec/r-base
 include different build options
 
