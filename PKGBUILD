@@ -127,7 +127,7 @@ build() {
   # The make runner, everytime, should not be bothered to set
   # the make flag G_FLAG to G_FLAG="-ggdb -Og"
   #
-  # If the QPDF flag is found (NOT WORKING: RETURN ANOTHER DAY)
+  # If the QPDF flag is found
   if ! test "0" = "`grep -c -e "^\s*QPDF\s*?\?+\?=\s*" ${srcdir}/MkRules.local.in`"
   then
     sed -i "s|^\s*QPDF\s*?\?+\?=.*|QPDF = /mingw\$(WIN)/|" ${srcdir}/MkRules.local.in
