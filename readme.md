@@ -4,7 +4,7 @@
 
 # What is This?
 
-This repository builds *modified clones* (think of a Star Wars Clonetrooper) of the Official-Version/Patched-snapshot/Build-of-the-development (OPB) version of R
+This repository builds *modified clones* (think of Star Wars Clonetroopers) of the Official-Version/Patched-snapshot/Build-of-the-development (OPB) version of R
 
 https://github.com/r-windows/r-base
 
