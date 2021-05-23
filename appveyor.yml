@@ -84,14 +84,14 @@ after_build:
 # - ps: SignFiles "${env:target}-win.exe"
 # - ps: Remove-Item –path $env:KeyFile
   - md5sum %target%-win.exe > md5sum.txt.%target%
-# - 7z a ..\..\%target%-win.zip %target%-win.exe md5sum.txt.%target% *.log *.html SVN-REVISION.* README.*
-  - 7z a ..\..\%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%_%DEPLOYNAME%.zip %target%-win.exe md5sum.txt.%target% *.log *.html SVN-REVISION.* README.*
+# - 7z a -t7z -mmt24 -mx7 ..\..\%target%-win.7z %target%-win.exe md5sum.txt.%target% *.log *.html SVN-REVISION.* README.*
+  - 7z a -t7z -mmt24 -mx7 ..\..\%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%_%DEPLOYNAME%.7z %target%-win.exe md5sum.txt.%target% *.log *.html SVN-REVISION.* README.*
 # - move %target%-win.exe ..\..\
   - cd ..\..
 
 artifacts:
-  - path: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%_%DEPLOYNAME%.zip"
-    name: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%_%DEPLOYNAME%.zip"
+  - path: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%_%DEPLOYNAME%.7z"
+    name: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%_%DEPLOYNAME%.7z"
 
 on_failure:
   - echo Total build time (with tests) takes OVER one hour
@@ -103,11 +103,11 @@ on_failure:
   - echo https://ftp.opencpu.org/archive/r-release/R-x.y.z/check.log
 
 deploy:
-  release: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%_%DEPLOYNAME%.zip"
+  release: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%_%DEPLOYNAME%.7z"
   provider: GitHub
   auth_token:
     secure: KzS1DumC2yBg2LGN9x3AemHFOjAdp+rD58rW5aGGpwW4Pfdwdm7AmRpYKprPY8Gs
-  artifact: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%_%DEPLOYNAME%.zip"
+  artifact: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%_%DEPLOYNAME%.7z"
   draft: false
   prerelease: false
   on:
