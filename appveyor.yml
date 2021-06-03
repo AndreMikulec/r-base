@@ -43,8 +43,6 @@ environment:
     DIST_BUILD: 'with Debugging Symbols'
     DEPLOYNAME: Generic_Debug
 
-  # in this form (did not successfully build(requested stronger debugging -> ALTREP error?))
-  # so tried a 2nd time
   # 
   - rsource_url: https://cran.r-project.org/src/base/R-4/R-4.1.0.tar.gz
     rversion: r-release
@@ -113,9 +111,9 @@ after_build:
   - cd ..\..
   #
   # so I can deploy
-  - cp R-latest.tar.gz    R-latest_%target%_%revision%_%DEPLOYNAME%.tar.gz 2>nul
-  - cp R-devel.tar.gz      R-devel_%target%_%revision%_%DEPLOYNAME%.tar.gz 2>nul
-  - cp %target%.tar.gz             %target%_%revision%_%DEPLOYNAME%.tar.gz 2>nul
+  - cp R-latest.tar.gz    R-latest_%target%_%revision%_%DEPLOYNAME%.tar.gz 2>nul || time /t
+  - cp R-devel.tar.gz      R-devel_%target%_%revision%_%DEPLOYNAME%.tar.gz 2>nul || time /t
+  - cp %target%.tar.gz             %target%_%revision%_%DEPLOYNAME%.tar.gz 2>nul || time /t
 
 
 artifacts:
@@ -174,17 +172,19 @@ on_finish:
   - echo revision %revision%
   - echo DEPLOYNAME %DEPLOYNAME%
   #
-  # these dissapear after 7 days
-  - dir R-latest.tar.gz 2>nul
+  - 7z a tests.zip src\R-source\src\nmath\standalone\check.log src\R-source\tests\*.Rout* src\build32\tests\*.Rout* C:\Users\appveyor\AppData\Local\MiKTeX\miktex\log\texify.log
+  - appveyor PushArtifact tests.zip
+  # these dissappear after 7 days
+  - dir R-latest.tar.gz 2>nul || time /t
   - appveyor PushArtifact R-latest.tar.gz
-  - dir R-devel.tar.gz  2>nul
+  - dir R-devel.tar.gz  2>nul || time /t
   - appveyor PushArtifact R-devel.tar.gz
-  - cp R-latest.tar.gz    R-latest_%target%_%revision%_%DEPLOYNAME%.tar.gz 2>nul
+  - cp R-latest.tar.gz    R-latest_%target%_%revision%_%DEPLOYNAME%.tar.gz 2>nul || time /t
   - appveyor PushArtifact R-latest_%target%_%revision%_%DEPLOYNAME%.tar.gz
-  - cp R-devel.tar.gz     R-devel_%target%_%revision%_%DEPLOYNAME%.tar.gz 2>nul
+  - cp R-devel.tar.gz     R-devel_%target%_%revision%_%DEPLOYNAME%.tar.gz 2>nul || time /t
   - appveyor PushArtifact R-devel_%target%_%revision%_%DEPLOYNAME%.tar.gz
-  - dir %target%.tar.gz 2>nul
-  - cp  %target%.tar.gz %target%_%revision%_%DEPLOYNAME%.tar.gz 2>nul
+  - dir %target%.tar.gz 2>nul || time /t
+  - cp  %target%.tar.gz %target%_%revision%_%DEPLOYNAME%.tar.gz 2>nul || time /t
   - appveyor PushArtifact %target%.tar.gz
   - appveyor PushArtifact %target%_%revision%_%DEPLOYNAME%.tar.gz
 #
