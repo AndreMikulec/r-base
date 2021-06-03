@@ -172,7 +172,11 @@ on_finish:
   - echo revision %revision%
   - echo DEPLOYNAME %DEPLOYNAME%
   #
-  - 7z a tests.zip src\R-source\src\nmath\standalone\check.log src\R-source\tests\*.Rout* src\build32\tests\*.Rout* C:\Users\appveyor\AppData\Local\MiKTeX\miktex\log\texify.log
+  - 7z a tests.zip src\R-source\src\nmath\standalone\check.log  2>nul || time /t
+  - 7z a tests.zip src\R-source\tests\*.Rout*  2>nul || time /t
+  - 7z a tests.zip src\build32\tests\*.Rout*   2>nul || time /t
+  - 7z a tests.zip C:\Users\appveyor\AppData\Local\MiKTeX\miktex\log\texify.log  2>nul || time /t
+  #
   - appveyor PushArtifact tests.zip
   # these dissappear after 7 days
   - dir R-latest.tar.gz 2>nul || time /t
