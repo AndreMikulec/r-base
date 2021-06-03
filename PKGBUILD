@@ -123,9 +123,9 @@ build() {
   # 64-bit windows can not read dwarf-2, 
   # so the symbols are worthless.
   # Therefore, the situation is better to 
-  # always keep sending G_FLAG="-ggdb -Og".
+  # always keep sending G_FLAG="-ggdb -Og -g3 -fno-omit-frame-pointer".
   # The make runner, everytime, should not be bothered to set
-  # the make flag G_FLAG to G_FLAG="-ggdb -Og"
+  # the make flag G_FLAG to G_FLAG="-ggdb -Og -g3 -fno-omit-frame-pointer"
   #
   # If the QPDF flag is found
   if ! test "0" = "`grep -c -e "^\s*QPDF\s*?\?+\?=\s*" ${srcdir}/MkRules.local.in`"
@@ -139,10 +139,10 @@ build() {
   # If the G_FLAG is found
   if ! test "0" = "`grep -c -e "^\s*G_FLAG\s*?\?+\?=\s*" ${srcdir}/MkRules.local.in`"
   then
-    sed -i "s/^\s*G_FLAG\s*?\?+\?=.*/G_FLAG = -ggdb -Og/" ${srcdir}/MkRules.local.in
+    sed -i "s/^\s*G_FLAG\s*?\?+\?=.*/G_FLAG = -ggdb -Og -g3 -fno-omit-frame-pointer/" ${srcdir}/MkRules.local.in
   else
     echo -e "\n"              >> ${srcdir}/MkRules.local.in
-    echo "G_FLAG = -ggdb -Og" >> ${srcdir}/MkRules.local.in
+    echo "G_FLAG = -ggdb -Og -g3 -fno-omit-frame-pointer" >> ${srcdir}/MkRules.local.in
   fi
   echo -e "\n" >> ${srcdir}/MkRules.local.in
   echo '$(info $$G_FLAG is [${G_FLAG}])' >> ${srcdir}/MkRules.local.in
@@ -223,12 +223,12 @@ build() {
   # If the DEBUGFLAG is found
   if ! test "0" = "`grep -c -e "^\s*DEBUGFLAG\s*?\?+\?=\s*" ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf`"
   then
-    sed -i -e "s/-gdwarf-2/-ggdb -Og/" ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
-    # WOULD HAVE ACCIDENTALLY done WHEN not DEBUG=T set DEBUGFLAG = -ggdb -Og # so that is wrong!
-    # sed -i -e "s/^\s*DEBUGFLAG\s*?\?+\?=.*/DEBUGFLAG = -ggdb -Og/" ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
+    sed -i -e "s/-gdwarf-2/-ggdb -Og -g3 -fno-omit-frame-pointer/" ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
+    # WOULD HAVE ACCIDENTALLY done WHEN not DEBUG=T set DEBUGFLAG = -ggdb -Og -g3 -fno-omit-frame-pointer # so that is wrong!
+    # sed -i -e "s/^\s*DEBUGFLAG\s*?\?+\?=.*/DEBUGFLAG = -ggdb -Og -g3 -fno-omit-frame-pointer/" ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
   else
     echo -e "\n" >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
-    echo "DEBUGFLAG = -ggdb -Og" >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
+    echo "DEBUGFLAG = -ggdb -Og -g3 -fno-omit-frame-pointer" >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
   fi
   echo -e "\n"                                 >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
   echo '$(info $$DEBUG is [${DEBUG}])'         >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
@@ -242,12 +242,12 @@ build() {
   # If the DEBUGFLAG is found
   if ! test "0" = "`grep -c -e "^\s*DEBUGFLAG\s*?\?+\?=\s*" ${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf`"
   then
-    sed -i -e "s/-gdwarf-2/-ggdb -Og/" ${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf
-    # WOULD HAVE ACCIDENTALLY done WHEN not DEBUG=T set DEBUGFLAG = -ggdb -Og # so that is wrong!
-    # sed -i -e "s/^\s*DEBUGFLAG\s*?\?+\?=.*/DEBUGFLAG = -ggdb -Og/" ${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf
+    sed -i -e "s/-gdwarf-2/-ggdb -Og -g3 -fno-omit-frame-pointer/" ${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf
+    # WOULD HAVE ACCIDENTALLY done WHEN not DEBUG=T set DEBUGFLAG = -ggdb -Og -g3 -fno-omit-frame-pointer # so that is wrong!
+    # sed -i -e "s/^\s*DEBUGFLAG\s*?\?+\?=.*/DEBUGFLAG = -ggdb -Og -g3 -fno-omit-frame-pointer/" ${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf
   else
     echo -e "\n" >> ${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf
-    echo "DEBUGFLAG = -ggdb -Og" >> ${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf
+    echo "DEBUGFLAG = -ggdb -Og -g3 -fno-omit-frame-pointer" >> ${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf
   fi
   echo -e "\n"                                 >> ${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf
   echo '$(info $$DEBUG is [${DEBUG}])'         >> ${srcdir}/R-source/src/gnuwin32/fixed/etc/Makeconf

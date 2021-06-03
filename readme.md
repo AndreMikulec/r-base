@@ -123,9 +123,9 @@ adding and using
 ```
 if ! test "0" = "`grep -c -e "^\s*G_FLAG\s*?\?+\?=\s*" ${srcdir}/MkRules.local.in`"
 then
-  sed -i "s/^\s*G_FLAG\s*?\?+\?=.*/G_FLAG = -ggdb -Og/" ${srcdir}/MkRules.local.in
+  sed -i "s/^\s*G_FLAG\s*?\?+\?=.*/G_FLAG = -ggdb -Og -g3 -fno-omit-frame-pointer/" ${srcdir}/MkRules.local.in
 else
-  echo "G_FLAG = -ggdb -Og" >> ${srcdir}/MkRules.local.in
+  echo "G_FLAG = -ggdb -Og -g3 -fno-omit-frame-pointer" >> ${srcdir}/MkRules.local.in
 fi
 ```
 sets (overrides) is the (self declared) variable G_FLAG in the
@@ -137,9 +137,9 @@ adding and using
 ```
 if ! test "0" = "`grep -c -e "^\s*DEBUGFLAG\s*?\?+\?=\s*" ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf`"
 then
-  sed -i -e "s/^\s*DEBUGFLAG\s*?\?+\?=.*/DEBUGFLAG = -ggdb -Og/" ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
+  sed -i -e "s/^\s*DEBUGFLAG\s*?\?+\?=.*/DEBUGFLAG = -ggdb -Og -g3 -fno-omit-frame-pointer/" ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
 else
-  echo "DEBUGFLAG = -ggdb -Og" >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
+  echo "DEBUGFLAG = -ggdb -Og -g3 -fno-omit-frame-pointer" >> ${srcdir}/build32/src/gnuwin32/fixed/etc/Makeconf
 fi
 ```
 sets (overrides) is the variable DEBUGFLAG in the
