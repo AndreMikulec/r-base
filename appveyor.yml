@@ -34,7 +34,7 @@ environment:
 #      DIST_BUILD: 'with Debugging Symbols'
 #      DEPLOYNAME: Generic_Debug_Optimize_Test
 
-    - rsource_url: https://cran.r-project.org/bin/windows/base/old/4.1.0/R-4.1.0.tar.gz
+    - rsource_url: https://cran.r-project.org/src/base/R-4/R-4.1.0.tar.gz
       rversion: r-release
       cran: true
       BUILDFLAGS: DEBUG=T
