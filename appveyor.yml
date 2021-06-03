@@ -122,7 +122,7 @@ artifacts:
   - path: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%_%DEPLOYNAME%.7z"
     name: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%_%DEPLOYNAME%.7z"
   - path: '*_%target%_%revision%_%DEPLOYNAME%.tar.gz'
-    name:    %target%_%revision%_%DEPLOYNAME%.tar.gz
+    name:   "%target%_%revision%_%DEPLOYNAME%.tar.gz"
 
 on_failure:
   - echo Total build time (with tests) takes OVER one hour
@@ -164,7 +164,7 @@ deploy:
     username: andremikulec,andremikulec.u
     password:
       secure: 4gk4GyW4O5RooiOyGeRdoA==
-    artifact: %target%_%revision%_%DEPLOYNAME%.tar.gz
+    artifact: "%target%_%revision%_%DEPLOYNAME%.tar.gz"
     folder: /home/frs/project/andremikulec
     application:
     active_mode: false
