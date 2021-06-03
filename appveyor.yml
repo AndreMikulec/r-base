@@ -25,23 +25,35 @@ environment:
 # CertKit: C:\Program Files (x86)\Windows Kits\10\App Certification Kit\appcert.exe
 # KeyFile: C:\jeroen.pfx
   matrix:
-#    - rsource_url: https://cran.r-project.org/src/base-prerelease/R-latest.tar.gz
-#      rversion: r-patched
-#      cran: true
-#      BUILDFLAGS: 'DEBUG=T USE_ATLAS=YES ATLAS_PATH=/mingw$(WIN)/lib/'
-#      MARCHMTUNE: '-march=corei7 -mavx -mavx2     -funroll-loops -ffast-math'
-#      MARCHMTUNENAME: 'CPU Build CoreI7 with AVX2'
-#      DIST_BUILD: 'with Debugging Symbols'
-#      DEPLOYNAME: Generic_Debug_Optimize_Test
+#     - rsource_url: https://cran.r-project.org/src/base-prerelease/R-latest.tar.gz
+#       rversion: r-patched
+#       cran: true
+#       BUILDFLAGS: 'DEBUG=T USE_ATLAS=YES ATLAS_PATH=/mingw$(WIN)/lib/'
+#       MARCHMTUNE: '-march=corei7 -mavx -mavx2     -funroll-loops -ffast-math'
+#       MARCHMTUNENAME: 'CPU Build CoreI7 with AVX2'
+#       DIST_BUILD: 'with Debugging Symbols'
+#       DEPLOYNAME: Generic_Debug_Optimize_Test
 
-    - rsource_url: https://cran.r-project.org/src/base/R-4/R-4.1.0.tar.gz
-      rversion: r-release
-      cran: true
-      BUILDFLAGS: DEBUG=T
-      MARCHMTUNE:
-      MARCHMTUNENAME: 'CPU Build Generic'
-      DIST_BUILD: 'with Debugging Symbols'
-      DEPLOYNAME: Generic_Debug
+  - rsource_url: https://cran.r-project.org/src/base-prerelease/R-latest.tar.gz
+    rversion: r-patched
+    cran: true
+    BUILDFLAGS: DEBUG=T
+    MARCHMTUNE:
+    MARCHMTUNENAME: 'CPU Build Generic'
+    DIST_BUILD: 'with Debugging Symbols'
+    DEPLOYNAME: Generic_Debug
+
+  # in this form (did not successfully build(requested stronger debugging -> ALTREP error?))
+  # so tried a 2nd time
+  # 
+  - rsource_url: https://cran.r-project.org/src/base/R-4/R-4.1.0.tar.gz
+    rversion: r-release
+    cran: true
+    BUILDFLAGS: DEBUG=T
+    MARCHMTUNE:
+    MARCHMTUNENAME: 'CPU Build Generic'
+    DIST_BUILD: 'with Debugging Symbols'
+    DEPLOYNAME: Generic_Debug
 
 #     - rsource_url: https://cran.r-project.org/src/base-prerelease/R-latest.tar.gz
 #       rversion: r-patched
@@ -124,6 +136,24 @@ deploy:
   on:
     branch: master
 
-# on_finish:
+on_finish:
+  - echo target %target%
+  - echo revision %revision%
+  - echo DEPLOYNAME %DEPLOYNAME%
+  #
+  # these dissapear after 7 days
+  - dir R-latest.tar.gz 2>nul
+  - appveyor PushArtifact R-latest.tar.gz
+  - dir R-devel.tar.gz  2>nul
+  - appveyor PushArtifact R-devel.tar.gz
+  - cp R-latest.tar.gz    R-latest_%target%_%revision%_%DEPLOYNAME%.tar.gz 2>nul
+  - appveyor PushArtifact R-latest_%target%_%revision%_%DEPLOYNAME%.tar.gz
+  - cp R-devel.tar.gz     R-devel_%target%_%revision%_%DEPLOYNAME%.tar.gz 2>nul
+  - appveyor PushArtifact R-devel_%target%_%revision%_%DEPLOYNAME%.tar.gz
+  - dir %target%.tar.gz 2>nul
+  - cp  %target%.tar.gz %target%_%revision%_%DEPLOYNAME%.tar.gz 2>nul
+  - appveyor PushArtifact %target%.tar.gz
+  - appveyor PushArtifact %target%_%revision%_%DEPLOYNAME%.tar.gz
+#
 #   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 # # remove locking file from the desktop
