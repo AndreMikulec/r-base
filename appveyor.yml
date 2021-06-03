@@ -176,21 +176,24 @@ on_finish:
   - 7z a -t7z -mmt24 -mx7 tests.7z src\R-source\tests\*.Rout*  2>nul || time /t
   - 7z a -t7z -mmt24 -mx7 tests.7z src\build32\tests\*.Rout*   2>nul || time /t
   - 7z a -t7z -mmt24 -mx7 tests.7z C:\Users\appveyor\AppData\Local\MiKTeX\miktex\log\texify.log  2>nul || time /t
-  - appveyor PushArtifact tests.7z
+  - appveyor PushArtifact tests.7z 2>nul || time /t
   #
   # these dissappear after 7 days
+  #
+  - dir *.tar.gz 2>nul || time /t
+  #
   - dir R-latest.tar.gz 2>nul || time /t
-  - appveyor PushArtifact R-latest.tar.gz
+  - appveyor PushArtifact R-latest.tar.gz 2>nul || time /t
   - dir R-devel.tar.gz  2>nul || time /t
-  - appveyor PushArtifact R-devel.tar.gz
+  - appveyor PushArtifact R-devel.tar.gz 2>nul || time /t
   - cp R-latest.tar.gz    R-latest_%target%_%revision%_%DEPLOYNAME%.tar.gz 2>nul || time /t
-  - appveyor PushArtifact R-latest_%target%_%revision%_%DEPLOYNAME%.tar.gz
+  - appveyor PushArtifact R-latest_%target%_%revision%_%DEPLOYNAME%.tar.gz 2>nul || time /t
   - cp R-devel.tar.gz     R-devel_%target%_%revision%_%DEPLOYNAME%.tar.gz 2>nul || time /t
-  - appveyor PushArtifact R-devel_%target%_%revision%_%DEPLOYNAME%.tar.gz
+  - appveyor PushArtifact R-devel_%target%_%revision%_%DEPLOYNAME%.tar.gz 2>nul || time /t
   - dir %target%.tar.gz 2>nul || time /t
   - cp  %target%.tar.gz %target%_%revision%_%DEPLOYNAME%.tar.gz 2>nul || time /t
-  - appveyor PushArtifact %target%.tar.gz
-  - appveyor PushArtifact %target%_%revision%_%DEPLOYNAME%.tar.gz
+  - appveyor PushArtifact %target%.tar.gz 2>nul || time /t
+  - appveyor PushArtifact %target%_%revision%_%DEPLOYNAME%.tar.gz 2>nul || time /t
 #
 #   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 # # remove locking file from the desktop
