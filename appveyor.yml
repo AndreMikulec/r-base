@@ -111,10 +111,18 @@ after_build:
   - 7z a -t7z -mmt24 -mx7 ..\..\%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%_%DEPLOYNAME%.7z %target%-win.exe md5sum.txt.%target% *.log *.html SVN-REVISION.* README.*
 # - move %target%-win.exe ..\..\
   - cd ..\..
+  #
+  # so I can deploy
+  - cp R-latest.tar.gz    R-latest_%target%_%revision%_%DEPLOYNAME%.tar.gz 2>nul
+  - cp R-devel.tar.gz      R-devel_%target%_%revision%_%DEPLOYNAME%.tar.gz 2>nul
+  - cp %target%.tar.gz             %target%_%revision%_%DEPLOYNAME%.tar.gz 2>nul
+
 
 artifacts:
   - path: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%_%DEPLOYNAME%.7z"
     name: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%_%DEPLOYNAME%.7z"
+  - path: '*_%target%_%revision%_%DEPLOYNAME%.tar.gz'
+    name:    %target%_%revision%_%DEPLOYNAME%.tar.gz
 
 on_failure:
   - echo Total build time (with tests) takes OVER one hour
@@ -126,15 +134,40 @@ on_failure:
   - echo https://ftp.opencpu.org/archive/r-release/R-x.y.z/check.log
 
 deploy:
-  release: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%_%DEPLOYNAME%.7z"
-  provider: GitHub
-  auth_token:
-    secure: KzS1DumC2yBg2LGN9x3AemHFOjAdp+rD58rW5aGGpwW4Pfdwdm7AmRpYKprPY8Gs
-  artifact: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%_%DEPLOYNAME%.7z"
-  draft: false
-  prerelease: false
-  on:
-    branch: master
+
+  - provider: GitHub
+    release: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%_%DEPLOYNAME%.7z"
+    auth_token:
+      secure: KzS1DumC2yBg2LGN9x3AemHFOjAdp+rD58rW5aGGpwW4Pfdwdm7AmRpYKprPY8Gs
+    artifact: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%_%DEPLOYNAME%.7z"
+    draft: false
+    prerelease: false
+    on:
+      branch: master
+
+  - provider: FTP
+    host: frs.sourceforge.net
+    protocol: sftp
+    # https://sourceforge.net/projects/andremikulec/files/
+    username: andremikulec,andremikulec.u
+    password:
+      secure: 4gk4GyW4O5RooiOyGeRdoA==
+    artifact: "%APPVEYOR_PROJECT_SLUG%_%appveyor_build_version%_%rversion%_%target%_%revision%_%DEPLOYNAME%.7z"
+    folder: /home/frs/project/andremikulec
+    application:
+    active_mode: false
+
+  - provider: FTP
+    host: frs.sourceforge.net
+    protocol: sftp
+    # https://sourceforge.net/projects/andremikulec/files/
+    username: andremikulec,andremikulec.u
+    password:
+      secure: 4gk4GyW4O5RooiOyGeRdoA==
+    artifact: %target%_%revision%_%DEPLOYNAME%.tar.gz
+    folder: /home/frs/project/andremikulec
+    application:
+    active_mode: false
 
 on_finish:
   - echo target %target%
